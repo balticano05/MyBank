@@ -1,0 +1,5 @@
+CREATE TABLE currencies(
+    id UUID PRIMARY KEY,
+    code VARCHAR(3) UNIQUE NOT NULL,
+    title VARCHAR(64) NOT NULL
+);
