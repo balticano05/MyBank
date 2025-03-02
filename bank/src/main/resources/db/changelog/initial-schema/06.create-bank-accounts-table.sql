@@ -1,6 +1,5 @@
 CREATE TABLE bank_accounts (
     id UUID PRIMARY KEY,
-    title VARCHAR(64) UNIQUE NOT NULL,
     owner_id UUID NOT NULL,
     created_at DATE,
     balance DECIMAL NOT NULL DEFAULT 0,

@@ -34,9 +34,6 @@ public class BankAccount {
     @UuidGenerator(style = UuidGenerator.Style.AUTO)
     private UUID id;
 
-    @Column(name = "title")
-    private String title;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
