@@ -1,6 +1,8 @@
 package com.pet.bank.dto.mapper;
 
+import com.pet.bank.dto.response.currency.CurrencyShortDto;
 import com.pet.bank.dto.response.loan.AllUserLoansResponseDto;
+import com.pet.bank.dto.response.loan.LoanCreationResponseDto;
 import com.pet.bank.dto.response.loan.LoanDto;
 import com.pet.bank.dto.response.loan.LoanFullResponseDto;
 import com.pet.bank.dto.response.loan.LoanShortDto;
@@ -10,6 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoanMapper {
+
+    public static LoanCreationResponseDto mapEntityToLoanCreationResponseDto(Loan source){
+        return LoanCreationResponseDto.builder()
+                .id(source.getId())
+                .amount(source.getAmount())
+                .currency(CurrencyShortDto.builder()
+                        .code(source.getCurrency().getCode())
+                        .build())
+                .interestRate(source.getInterestRate())
+                .startDate(source.getStartDate())
+                .endDate(source.getEndDate())
+                .status(source.getStatus())
+                .build();
+    }
 
     public static LoanFullResponseDto mapEntityToFullResponseDto(Loan source){
         return LoanFullResponseDto.builder()

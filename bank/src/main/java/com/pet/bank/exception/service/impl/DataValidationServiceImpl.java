@@ -6,6 +6,7 @@ import com.pet.bank.exception.type.ClientException;
 import com.pet.bank.repository.BankAccountRepository;
 import com.pet.bank.repository.CardRepository;
 import com.pet.bank.repository.CurrencyRepository;
+import com.pet.bank.repository.LoanRepository;
 import com.pet.bank.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.CurrencyEditor;
@@ -21,6 +22,7 @@ public class DataValidationServiceImpl implements DataValidationService {
 
     private final UserRepository userRepository;
     private final CardRepository cardRepository;
+    private final LoanRepository loanRepository;
     private final CurrencyRepository currencyRepository;
     private final BankAccountRepository bankAccountRepository;
 
@@ -59,6 +61,16 @@ public class DataValidationServiceImpl implements DataValidationService {
         if(!cardRepository.existsById(cardId)){
             throw ClientException.builder()
                     .message(ErrorMessages.CARD_NOT_FOUND.format(cardId))
+                    .httpStatus(status)
+                    .build();
+        }
+    }
+
+    @Override
+    public void existsLoanById(UUID loanId, HttpStatus status) {
+        if(!loanRepository.existsById(loanId)){
+            throw ClientException.builder()
+                    .message(ErrorMessages.LOAN_NOT_FOUND.format(loanId))
                     .httpStatus(status)
                     .build();
         }

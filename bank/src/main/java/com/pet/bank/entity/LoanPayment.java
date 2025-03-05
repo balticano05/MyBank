@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -39,7 +40,7 @@ public class LoanPayment {
     private BigDecimal paymentAmount;
 
     @Column(name = "payment_date")
-    private BigDecimal paymentDate;
+    private Date paymentDate;
 
     @Column(name = "status")
     private String status;

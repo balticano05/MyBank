@@ -14,4 +14,6 @@ public interface DataValidationService {
 
     void existsCardById(UUID cardId, HttpStatus status);
 
+    void existsLoanById(UUID loanId, HttpStatus status);
+
 }

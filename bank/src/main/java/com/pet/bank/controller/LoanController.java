@@ -1,11 +1,15 @@
 package com.pet.bank.controller;
 
+import com.pet.bank.dto.request.RepayLoanRequestDto;
 import com.pet.bank.dto.response.loan.AllUserLoansResponseDto;
+import com.pet.bank.dto.request.loan.LoanCreationRequestDto;
+import com.pet.bank.dto.response.loan.LoanCreationResponseDto;
 import com.pet.bank.dto.response.loan.LoanFullResponseDto;
 import com.pet.bank.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +30,16 @@ public class LoanController {
     @GetMapping("/{loanId}")
     public LoanFullResponseDto findLoanById(@PathVariable UUID loanId){
         return loanService.findLoanById(loanId);
+    }
+
+    @PostMapping("/bankId")
+    public LoanCreationResponseDto createLoanForUser(UUID userId, @PathVariable UUID bankId, LoanCreationRequestDto loanRequest){
+        return loanService.createLoanForUser(userId, bankId, loanRequest);
+    }
+
+    @PostMapping("/{loanId}/repayment")
+    public void repayForLoan(@PathVariable UUID loanId, RepayLoanRequestDto repayLoanRequest){
+        loanService.repayForLoan(loanId, repayLoanRequest);
     }
 
 }

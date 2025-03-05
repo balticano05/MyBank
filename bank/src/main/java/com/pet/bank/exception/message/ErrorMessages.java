@@ -10,6 +10,7 @@ public enum ErrorMessages {
     USER_NOT_FOUND("User with id %s not found"),
     BANK_ACCOUNT_NOT_FOUND("Bank account with id %s not found"),
     CURRENCY_WITH_CODE_NOT_FOUND("Currency with code %s not found"),
+    LOAN_NOT_FOUND("Loan with id %s not found"),
     CARD_NOT_FOUND("Currency with id %s not found"),
     INVALID_REQUEST_DATA("Invalid request parameters: %s");
 
