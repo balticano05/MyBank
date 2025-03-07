@@ -38,7 +38,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public AllUserBankAccountsResponseDto findAllBankAccountsByUserId(UUID userId) {
 
-        List<BankAccount> userBankAccounts = bankAccountRepository.findAllBankAccountsByUserId(userId);
+        List<BankAccount> userBankAccounts = bankAccountRepository.findAllBankAccountsByOwnerId(userId);
 
         return BankAccountMapper.mapEntitiesToAllUserBankAccountsResponseDto(userBankAccounts);
     }

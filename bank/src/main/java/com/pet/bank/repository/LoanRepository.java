@@ -10,6 +10,6 @@ public interface LoanRepository extends JpaRepository<Loan, UUID> {
 
     List<Loan> findAllLoansByUserId(UUID userId);
 
-    Loan findByLoanId(UUID loanId);
+    Loan findLoanById(UUID loanId);
 
 }

@@ -24,7 +24,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionInfoResponseDto findTransactionById(UUID transactionId) {
-        return TransactionMapper.mapEntityToTransactionInfoResponse(transactionRepository.findByTransactionId(transactionId));
+        return TransactionMapper.mapEntityToTransactionInfoResponse(transactionRepository.findTransactionById(transactionId));
     }
 
 }

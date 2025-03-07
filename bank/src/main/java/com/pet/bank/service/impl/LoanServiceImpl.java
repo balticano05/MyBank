@@ -44,7 +44,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     public LoanFullResponseDto findLoanById(UUID loanId) {
-        return LoanMapper.mapEntityToFullResponseDto(loanRepository.findByLoanId(loanId));
+        return LoanMapper.mapEntityToFullResponseDto(loanRepository.findLoanById(loanId));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class LoanServiceImpl implements LoanService {
         dataValidationService.existsLoanById(loanId, HttpStatus.NOT_FOUND);
         dataValidationService.existsBankAccountById(repayLoanRequest.getBankAccountId(), HttpStatus.NOT_FOUND);
 
-        Loan loan = loanRepository.findByLoanId(loanId);
+        Loan loan = loanRepository.findLoanById(loanId);
         BankAccount bankAccount = bankAccountRepository.findBankAccountById(repayLoanRequest.getBankAccountId());
 
         validateRepayment(loan, repayLoanRequest, bankAccount);

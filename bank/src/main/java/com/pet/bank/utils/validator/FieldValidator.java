@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @UtilityClass
 public class FieldValidator {
 
-    public boolean isNotEmpty(String value){
+    public boolean isNotEmpty(String value) {
         return value != null && !value.trim().isEmpty();
     }
 
@@ -20,19 +20,24 @@ public class FieldValidator {
         return value != null;
     }
 
-    public boolean isValidCardType(String cardNumber){
+    public boolean isValidCardType(String cardNumber) {
         return isNotEmpty(cardNumber);
     }
 
     public boolean isValidBankAccountStatus(String status) {
+
         if (status == null) {
+
             return false;
         }
+
         for (BankAccountStatus accountStatus : BankAccountStatus.values()) {
             if (accountStatus.getValue().equals(status)) {
+
                 return true;
             }
         }
+
         return false;
     }
 

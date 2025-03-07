@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,18 +33,18 @@ public class Transaction {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "from_account_id")
+    @JoinColumn(name = "from_account_id")
     private BankAccount fromAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "to_account_id")
+    @JoinColumn(name = "to_account_id")
     private BankAccount toAccount;
 
     @Column(name = "amount")
     private BigDecimal amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "currency_id")
+    @JoinColumn(name = "currency_id")
     private Currency currency;
 
     @Column(name = "transaction_type")
