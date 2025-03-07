@@ -2,7 +2,7 @@ package com.pet.bank.dto.mapper;
 
 import com.pet.bank.dto.response.transaction.AllBankAccountTransactionsResponseDto;
 import com.pet.bank.dto.response.transaction.TransactionInfoResponseDto;
-import com.pet.bank.dto.response.transaction.TransactionShortDto;
+import com.pet.bank.dto.response.transaction.nested.TransactionShortDto;
 import com.pet.bank.entity.Transaction;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TransactionMapper {
 
-    public static TransactionInfoResponseDto mapEntityToTransactionInfoResponse(Transaction source){
+    public static TransactionInfoResponseDto mapEntityToTransactionInfoResponse(Transaction source) {
         return TransactionInfoResponseDto.builder()
                 .id(source.getId())
                 .fromAccountId(source.getFromAccount().getId())
@@ -23,15 +23,15 @@ public class TransactionMapper {
     }
 
     public static AllBankAccountTransactionsResponseDto mapEntitiesToAllBankAccountTransactionsResponseDto
-            (List<Transaction> transactions){
+            (List<Transaction> transactions) {
         return AllBankAccountTransactionsResponseDto.builder()
                 .transactions(mapEntitiesToListTransactionShorDto(transactions))
                 .build();
     }
 
-    private static List<TransactionShortDto> mapEntitiesToListTransactionShorDto(List<Transaction> source){
+    private static List<TransactionShortDto> mapEntitiesToListTransactionShorDto(List<Transaction> source) {
 
-        if(source == null)
+        if (source == null)
             return new ArrayList<>();
 
         return source.stream()
@@ -39,7 +39,7 @@ public class TransactionMapper {
                 .toList();
     }
 
-    private static TransactionShortDto mapEntityToTransactionShortDto(Transaction source){
+    private static TransactionShortDto mapEntityToTransactionShortDto(Transaction source) {
         return TransactionShortDto.builder()
                 .id(source.getId())
                 .fromAccountId(source.getFromAccount().getId())

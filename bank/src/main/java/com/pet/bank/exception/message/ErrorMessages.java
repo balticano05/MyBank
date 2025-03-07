@@ -12,11 +12,13 @@ public enum ErrorMessages {
     CURRENCY_WITH_CODE_NOT_FOUND("Currency with code %s not found"),
     LOAN_NOT_FOUND("Loan with id %s not found"),
     CARD_NOT_FOUND("Currency with id %s not found"),
-    INVALID_REQUEST_DATA("Invalid request parameters: %s");
+    INVALID_REQUEST_DATA("Invalid request parameters: %s"),
+    EXCHANGE_RATE_FOR_CURRENCIES_NOT_FOUND("Exchange rate for currencies %s and %s");
 
     private final String message;
 
     public String format(Object... args) {
         return String.format(message, args);
     }
+
 }

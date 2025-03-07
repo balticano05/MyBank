@@ -19,12 +19,12 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping("bankAccountId")
-    public AllBankAccountTransactionsResponseDto findAllTransactionsByBankAccountId(@PathVariable UUID bankAccountId){
+    public AllBankAccountTransactionsResponseDto findAllTransactionsByBankAccountId(@PathVariable UUID bankAccountId) {
         return transactionService.findAllTransactionsByBankAccountId(bankAccountId);
     }
 
     @GetMapping("/{transactionId}")
-    public TransactionInfoResponseDto findTransactionById(@PathVariable UUID transactionId){
+    public TransactionInfoResponseDto findTransactionById(@PathVariable UUID transactionId) {
         return transactionService.findTransactionById(transactionId);
     }
 

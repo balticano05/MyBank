@@ -2,7 +2,7 @@ package com.pet.bank.dto.mapper;
 
 import com.pet.bank.dto.response.card.AllBankAccountCardsResponseDto;
 import com.pet.bank.dto.response.card.CardCreationResponseDto;
-import com.pet.bank.dto.response.card.CardDto;
+import com.pet.bank.dto.response.card.nested.CardDto;
 import com.pet.bank.entity.Card;
 
 import java.util.ArrayList;
@@ -10,22 +10,7 @@ import java.util.List;
 
 public class CardMapper {
 
-    public static CardCreationResponseDto mapEntityToCardCreationResponseDto(Card card){
-        return CardCreationResponseDto.builder()
-                .id(card.getId())
-                .cardNumber(card.getCardNumber())
-                .cardType(card.getCardType())
-                .isActive(card.isActive())
-                .build();
-    }
-
-    public static AllBankAccountCardsResponseDto mapEntitiesToAllBankAccountCardsResponseDto(List<Card> cards){
-        return AllBankAccountCardsResponseDto.builder()
-                .cards(mapEntitiesToListCardDto(cards))
-                .build();
-    }
-
-    public static CardDto mapEntityToCardDto(Card source){
+    public static CardDto mapEntityToCardDto(Card source) {
         return CardDto.builder()
                 .id(source.getId())
                 .cardNumber(source.getCardNumber())
@@ -34,9 +19,24 @@ public class CardMapper {
                 .build();
     }
 
-    public static List<CardDto> mapEntitiesToListCardDto(List<Card> source){
+    public static CardCreationResponseDto mapEntityToCardCreationResponseDto(Card card) {
+        return CardCreationResponseDto.builder()
+                .id(card.getId())
+                .cardNumber(card.getCardNumber())
+                .cardType(card.getCardType())
+                .isActive(card.isActive())
+                .build();
+    }
 
-        if(source == null)
+    public static AllBankAccountCardsResponseDto mapEntitiesToAllBankAccountCardsResponseDto(List<Card> cards) {
+        return AllBankAccountCardsResponseDto.builder()
+                .cards(mapEntitiesToListCardDto(cards))
+                .build();
+    }
+
+    public static List<CardDto> mapEntitiesToListCardDto(List<Card> source) {
+
+        if (source == null)
             return new ArrayList<>();
 
         return source.stream()

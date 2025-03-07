@@ -1,19 +1,19 @@
 package com.pet.bank.exception.service.impl;
 
+import com.pet.bank.entity.Currency;
 import com.pet.bank.exception.message.ErrorMessages;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.exception.type.ClientException;
 import com.pet.bank.repository.BankAccountRepository;
 import com.pet.bank.repository.CardRepository;
 import com.pet.bank.repository.CurrencyRepository;
+import com.pet.bank.repository.ExchangeRateRepository;
 import com.pet.bank.repository.LoanRepository;
 import com.pet.bank.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.propertyeditors.CurrencyEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.Currency;
 import java.util.UUID;
 
 @Component
@@ -25,6 +25,7 @@ public class DataValidationServiceImpl implements DataValidationService {
     private final LoanRepository loanRepository;
     private final CurrencyRepository currencyRepository;
     private final BankAccountRepository bankAccountRepository;
+    private final ExchangeRateRepository exchangeRateRepository;
 
     @Override
     public void existsUserById(UUID userId, HttpStatus status) {
@@ -48,7 +49,7 @@ public class DataValidationServiceImpl implements DataValidationService {
 
     @Override
     public void existsCurrencyByCode(String code, HttpStatus status) {
-        if(!currencyRepository.existsCurrencyByCode(code)){
+        if (!currencyRepository.existsCurrencyByCode(code)) {
             throw ClientException.builder()
                     .message(ErrorMessages.CURRENCY_WITH_CODE_NOT_FOUND.format(code))
                     .httpStatus(status)
@@ -58,7 +59,7 @@ public class DataValidationServiceImpl implements DataValidationService {
 
     @Override
     public void existsCardById(UUID cardId, HttpStatus status) {
-        if(!cardRepository.existsById(cardId)){
+        if (!cardRepository.existsById(cardId)) {
             throw ClientException.builder()
                     .message(ErrorMessages.CARD_NOT_FOUND.format(cardId))
                     .httpStatus(status)
@@ -68,11 +69,22 @@ public class DataValidationServiceImpl implements DataValidationService {
 
     @Override
     public void existsLoanById(UUID loanId, HttpStatus status) {
-        if(!loanRepository.existsById(loanId)){
+        if (!loanRepository.existsById(loanId)) {
             throw ClientException.builder()
                     .message(ErrorMessages.LOAN_NOT_FOUND.format(loanId))
                     .httpStatus(status)
                     .build();
         }
     }
+
+    @Override
+    public void existsExchangeRate(Currency fromCurrency, Currency toCurrency, HttpStatus status) {
+        if (!exchangeRateRepository.existsByBaseCurrencyIdAndTargetCurrencyId(fromCurrency, toCurrency)) {
+            throw ClientException.builder()
+                    .message(ErrorMessages.EXCHANGE_RATE_FOR_CURRENCIES_NOT_FOUND.format(fromCurrency, toCurrency))
+                    .httpStatus(status)
+                    .build();
+        }
+    }
+
 }

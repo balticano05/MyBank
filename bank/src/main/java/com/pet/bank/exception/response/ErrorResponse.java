@@ -11,7 +11,9 @@ import java.time.Instant;
 public class ErrorResponse {
 
     private final HttpStatus status;
+
     private final String message;
+
     private final Instant timestamp = Instant.now();
 
 }

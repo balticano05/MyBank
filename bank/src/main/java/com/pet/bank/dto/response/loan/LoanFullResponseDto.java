@@ -1,10 +1,9 @@
 package com.pet.bank.dto.response.loan;
 
-import com.pet.bank.dto.response.currency.CurrencyDto;
-import com.pet.bank.dto.response.currency.CurrencyShortDto;
+import com.pet.bank.dto.response.currency.nested.CurrencyDto;
 import com.pet.bank.dto.response.loan.payment.LoanPaymentDto;
 import com.pet.bank.dto.response.user.nested.UserShortDto;
-import com.pet.bank.entity.Currency;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

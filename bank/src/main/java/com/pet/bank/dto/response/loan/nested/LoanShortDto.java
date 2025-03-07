@@ -1,6 +1,5 @@
-package com.pet.bank.dto.response.bank.account;
+package com.pet.bank.dto.response.loan.nested;
 
-import com.pet.bank.dto.response.card.CardDto;
 import com.pet.bank.entity.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -18,18 +16,20 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankAccountDto {
+public class LoanShortDto {
 
     private UUID id;
 
-    private Date createdAt;
-
-    private BigDecimal balance;
-
-    private String status;
+    private BigDecimal amount;
 
     private Currency currency;
 
-    private List<CardDto> cards;
+    private BigDecimal interestRate;
+
+    private Date startDate;
+
+    private Date endDate;
+
+    private String status;
 
 }

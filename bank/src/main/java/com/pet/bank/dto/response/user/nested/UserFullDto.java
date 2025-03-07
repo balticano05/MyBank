@@ -1,7 +1,8 @@
 package com.pet.bank.dto.response.user.nested;
 
-import com.pet.bank.dto.response.bank.account.BankAccountDto;
-import com.pet.bank.dto.response.loan.LoanDto;
+import com.pet.bank.dto.response.bank.account.nested.BankAccountDto;
+import com.pet.bank.dto.response.loan.nested.LoanDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

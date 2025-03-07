@@ -1,5 +1,6 @@
 package com.pet.bank.dto.response.bank.account;
 
+import com.pet.bank.dto.response.bank.account.nested.BankAccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

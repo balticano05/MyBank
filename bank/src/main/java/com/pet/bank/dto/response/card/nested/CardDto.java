@@ -1,4 +1,4 @@
-package com.pet.bank.dto.response.card;
+package com.pet.bank.dto.response.card.nested;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
-
 
 @Getter
 @Setter

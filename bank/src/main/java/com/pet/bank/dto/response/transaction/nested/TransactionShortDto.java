@@ -1,12 +1,7 @@
-package com.pet.bank.dto.response.transaction;
+package com.pet.bank.dto.response.transaction.nested;
 
-import com.pet.bank.dto.response.bank.account.BankAccountIdDto;
 import com.pet.bank.dto.response.currency.CurrencyShortDto;
-import com.pet.bank.entity.BankAccount;
-import com.pet.bank.entity.Currency;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

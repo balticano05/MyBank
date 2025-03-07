@@ -9,7 +9,6 @@ import com.pet.bank.dto.response.user.UserFullResponseDto;
 import com.pet.bank.dto.response.user.UserUpdateResponseDto;
 import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
-import com.pet.bank.exception.type.NotFoundException;
 import com.pet.bank.repository.UserRepository;
 import com.pet.bank.service.UserService;
 import com.pet.bank.utils.validator.FieldValidator;
@@ -87,4 +86,5 @@ public class UserServiceImpl implements UserService {
 
         userRepository.deleteById(userid);
     }
+
 }

@@ -1,7 +1,6 @@
 package com.pet.bank.dto.response.credential;
 
 import com.pet.bank.dto.response.role.RoleShortDto;
-import com.pet.bank.entity.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

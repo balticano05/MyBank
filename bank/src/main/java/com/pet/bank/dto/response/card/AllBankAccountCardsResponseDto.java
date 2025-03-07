@@ -1,5 +1,6 @@
 package com.pet.bank.dto.response.card;
 
+import com.pet.bank.dto.response.card.nested.CardDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

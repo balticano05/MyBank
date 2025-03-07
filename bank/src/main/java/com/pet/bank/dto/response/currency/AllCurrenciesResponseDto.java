@@ -1,6 +1,6 @@
-package com.pet.bank.dto.response.transaction;
+package com.pet.bank.dto.response.currency;
 
-import com.pet.bank.dto.response.transaction.nested.TransactionShortDto;
+import com.pet.bank.dto.response.currency.nested.CurrencyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +14,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AllBankAccountTransactionsResponseDto {
+public class AllCurrenciesResponseDto {
 
-    private List<TransactionShortDto> transactions;
+    private List<CurrencyDto> currencies;
 
 }

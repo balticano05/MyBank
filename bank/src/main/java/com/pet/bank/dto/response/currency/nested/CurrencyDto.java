@@ -1,6 +1,5 @@
-package com.pet.bank.dto.response.currency;
+package com.pet.bank.dto.response.currency.nested;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

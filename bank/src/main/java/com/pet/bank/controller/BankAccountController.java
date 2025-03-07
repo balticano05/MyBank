@@ -27,12 +27,12 @@ public class BankAccountController {
     private final BankAccountService bankAccountService;
 
     @GetMapping
-    public AllUserBankAccountsResponseDto findAllBankAccounts(@PathVariable UUID userId){
+    public AllUserBankAccountsResponseDto findAllBankAccounts(@PathVariable UUID userId) {
         return bankAccountService.findAllBankAccountsByUserId(userId);
     }
 
     @GetMapping("{bankAccountId}")
-    public BankAccountFullResponseDto findBankAccountById(@PathVariable UUID bankAccountId){
+    public BankAccountFullResponseDto findBankAccountById(@PathVariable UUID bankAccountId) {
         return bankAccountService.findBankAccountById(bankAccountId);
     }
 
@@ -47,12 +47,12 @@ public class BankAccountController {
     public BankAccountUpdateResponseDto updateBankAccountById(
             @PathVariable UUID bankAccountId,
             @RequestBody BankAccountUpdateRequestDto bankAccountUpdateRequestDto
-            ){
+    ) {
         return bankAccountService.updateBankAccountById(bankAccountId, bankAccountUpdateRequestDto);
     }
 
     @DeleteMapping("{bankAccountId}")
-    public void deleteBankAccountById(@PathVariable UUID bankAccountId){
+    public void deleteBankAccountById(@PathVariable UUID bankAccountId) {
         bankAccountService.deleteBankAccountById(bankAccountId);
     }
 

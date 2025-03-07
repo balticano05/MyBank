@@ -23,22 +23,22 @@ public class LoanController {
     private final LoanService loanService;
 
     @GetMapping
-    public AllUserLoansResponseDto findAllLoansByUserId(@PathVariable UUID userId){
+    public AllUserLoansResponseDto findAllLoansByUserId(@PathVariable UUID userId) {
         return loanService.findAllLoansByUserId(userId);
     }
 
     @GetMapping("/{loanId}")
-    public LoanFullResponseDto findLoanById(@PathVariable UUID loanId){
+    public LoanFullResponseDto findLoanById(@PathVariable UUID loanId) {
         return loanService.findLoanById(loanId);
     }
 
     @PostMapping("/bankId")
-    public LoanCreationResponseDto createLoanForUser(UUID userId, @PathVariable UUID bankId, LoanCreationRequestDto loanRequest){
+    public LoanCreationResponseDto createLoanForUser(UUID userId, @PathVariable UUID bankId, LoanCreationRequestDto loanRequest) {
         return loanService.createLoanForUser(userId, bankId, loanRequest);
     }
 
     @PostMapping("/{loanId}/repayment")
-    public void repayForLoan(@PathVariable UUID loanId, RepayLoanRequestDto repayLoanRequest){
+    public void repayForLoan(@PathVariable UUID loanId, RepayLoanRequestDto repayLoanRequest) {
         loanService.repayForLoan(loanId, repayLoanRequest);
     }
 

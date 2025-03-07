@@ -9,8 +9,8 @@ import com.pet.bank.dto.response.loan.LoanFullResponseDto;
 import com.pet.bank.entity.BankAccount;
 import com.pet.bank.entity.Loan;
 import com.pet.bank.entity.LoanPayment;
-import com.pet.bank.entity.LoanPaymentStatus;
-import com.pet.bank.entity.LoanStatus;
+import com.pet.bank.entity.enums.LoanPaymentStatus;
+import com.pet.bank.entity.enums.LoanStatus;
 import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.repository.BankAccountRepository;
@@ -43,7 +43,7 @@ public class LoanServiceImpl implements LoanService {
         return LoanMapper.mapEntitiesToAllUserLoansResponseDto(loanRepository.findAllLoansByUserId(userId));
     }
 
-    public LoanFullResponseDto findLoanById(UUID loanId){
+    public LoanFullResponseDto findLoanById(UUID loanId) {
         return LoanMapper.mapEntityToFullResponseDto(loanRepository.findByLoanId(loanId));
     }
 
@@ -94,7 +94,7 @@ public class LoanServiceImpl implements LoanService {
 
         loan.getLoanPayments().add(payment);
 
-        if(isLoanFullyRepaid(loan)){
+        if (isLoanFullyRepaid(loan)) {
             loan.setStatus(LoanStatus.REPAID.getValue());
         }
 
@@ -111,7 +111,7 @@ public class LoanServiceImpl implements LoanService {
             throw new IllegalArgumentException("Currency is required");
         }
 
-        if (!FieldValidator.isNotNegative(loanRequest.getInterestRate())) {
+        if (FieldValidator.isNotNegative(loanRequest.getInterestRate())) {
             throw new IllegalArgumentException("Interest rate must be non-negative");
         }
 
@@ -134,7 +134,7 @@ public class LoanServiceImpl implements LoanService {
             throw new IllegalStateException("Loan is not active");
         }
 
-        if (!FieldValidator.isNotNegative(request.getAmount()) ||
+        if (FieldValidator.isNotNegative(request.getAmount()) ||
                 request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Invalid payment amount");
         }

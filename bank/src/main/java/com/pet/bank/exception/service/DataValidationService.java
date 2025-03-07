@@ -1,5 +1,6 @@
 package com.pet.bank.exception.service;
 
+import com.pet.bank.entity.Currency;
 import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
@@ -15,5 +16,7 @@ public interface DataValidationService {
     void existsCardById(UUID cardId, HttpStatus status);
 
     void existsLoanById(UUID loanId, HttpStatus status);
+
+    void existsExchangeRate(Currency fromCurrency, Currency toCurrency,  HttpStatus status);
 
 }

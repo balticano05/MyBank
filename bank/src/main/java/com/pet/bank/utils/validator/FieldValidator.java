@@ -1,10 +1,9 @@
 package com.pet.bank.utils.validator;
 
-import com.pet.bank.entity.BankAccountStatus;
+import com.pet.bank.entity.enums.BankAccountStatus;
 import lombok.experimental.UtilityClass;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 @UtilityClass
 public class FieldValidator {
@@ -14,15 +13,11 @@ public class FieldValidator {
     }
 
     public boolean isNotNegative(BigDecimal value) {
-        return value != null && value.compareTo(BigDecimal.ZERO) >= 0;
+        return value == null || value.compareTo(BigDecimal.ZERO) < 0;
     }
 
     public boolean isNotNull(Object value) {
         return value != null;
-    }
-
-    public boolean isNotEmpty(Collection<?> collection) {
-        return collection != null && !collection.isEmpty();
     }
 
     public boolean isValidCardType(String cardNumber){

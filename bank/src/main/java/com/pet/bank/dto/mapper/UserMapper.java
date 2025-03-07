@@ -1,7 +1,6 @@
 package com.pet.bank.dto.mapper;
 
 import com.pet.bank.dto.request.user.UserCreationRequestDto;
-import com.pet.bank.dto.request.user.UserUpdateRequestDto;
 import com.pet.bank.dto.response.user.AllUsersShortResponseDto;
 import com.pet.bank.dto.response.user.UserCreationResponseDto;
 import com.pet.bank.dto.response.user.UserFullResponseDto;
@@ -15,8 +14,8 @@ import java.util.List;
 
 public class UserMapper {
 
-    public static UserUpdateResponseDto mapEntityToUserUpdateResponseDto(User source){
-        return UserUpdateResponseDto.builder()
+    public static UserShortDto mapEntityToUserShortDto(User source){
+        return UserShortDto.builder()
                 .id(source.getId())
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())
@@ -26,19 +25,19 @@ public class UserMapper {
                 .build();
     }
 
-    public static User mapUserRequestDtoToEntity(UserUpdateRequestDto source){
-        return User.builder()
+    public static UserCreationResponseDto mapEntityToUserCreationResponseDto(User source){
+        return UserCreationResponseDto.builder()
+                .id(source.getId())
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())
                 .phoneNumber(source.getPhoneNumber())
                 .address(source.getAddress())
                 .dateOfBirth(source.getDateOfBirth())
                 .build();
-
     }
 
-    public static UserCreationResponseDto mapEntityToUserCreationResponseDto(User source){
-        return UserCreationResponseDto.builder()
+    public static UserUpdateResponseDto mapEntityToUserUpdateResponseDto(User source){
+        return UserUpdateResponseDto.builder()
                 .id(source.getId())
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())
@@ -65,12 +64,6 @@ public class UserMapper {
                 .build();
     }
 
-    public static AllUsersShortResponseDto mapEntitiesToAllUserShortResponseDto(List<User> source){
-        return AllUsersShortResponseDto.builder()
-                .users(mapEntitiesToUserShortDtoList(source))
-                .build();
-    }
-
     private static UserFullDto mapEntityToUserFullDto(User source){
         return UserFullDto.builder()
                 .id(source.getId())
@@ -84,6 +77,12 @@ public class UserMapper {
                 .build();
     }
 
+    public static AllUsersShortResponseDto mapEntitiesToAllUserShortResponseDto(List<User> source){
+        return AllUsersShortResponseDto.builder()
+                .users(mapEntitiesToUserShortDtoList(source))
+                .build();
+    }
+
     private static List<UserShortDto> mapEntitiesToUserShortDtoList(List<User> source){
 
         if(source == null)
@@ -92,17 +91,6 @@ public class UserMapper {
         return source.stream()
                 .map(UserMapper::mapEntityToUserShortDto)
                 .toList();
-    }
-
-    public static UserShortDto mapEntityToUserShortDto(User source){
-        return UserShortDto.builder()
-                .id(source.getId())
-                .firstName(source.getFirstName())
-                .lastName(source.getLastName())
-                .phoneNumber(source.getPhoneNumber())
-                .address(source.getAddress())
-                .dateOfBirth(source.getDateOfBirth())
-                .build();
     }
 
 }

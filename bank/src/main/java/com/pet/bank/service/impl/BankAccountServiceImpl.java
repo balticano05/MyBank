@@ -1,7 +1,6 @@
 package com.pet.bank.service.impl;
 
 import com.pet.bank.dto.mapper.BankAccountMapper;
-import com.pet.bank.dto.mapper.CurrencyMapper;
 import com.pet.bank.dto.request.bank.account.BankAccountCreationRequestDto;
 import com.pet.bank.dto.request.bank.account.BankAccountUpdateRequestDto;
 import com.pet.bank.dto.response.bank.account.AllUserBankAccountsResponseDto;
@@ -13,7 +12,6 @@ import com.pet.bank.entity.Currency;
 import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.exception.type.BadRequestException;
-import com.pet.bank.exception.type.NotFoundException;
 import com.pet.bank.repository.BankAccountRepository;
 import com.pet.bank.repository.CurrencyRepository;
 import com.pet.bank.repository.UserRepository;
@@ -39,6 +37,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public AllUserBankAccountsResponseDto findAllBankAccountsByUserId(UUID userId) {
+
         List<BankAccount> userBankAccounts = bankAccountRepository.findAllBankAccountsByUserId(userId);
 
         return BankAccountMapper.mapEntitiesToAllUserBankAccountsResponseDto(userBankAccounts);
@@ -46,6 +45,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public BankAccountFullResponseDto findBankAccountById(UUID bankAccountId) {
+
         BankAccount foundBankAccount = bankAccountRepository.findBankAccountById(bankAccountId);
 
         return BankAccountMapper.mapEntityToBankAccountFullResponseDto(foundBankAccount);
@@ -76,20 +76,25 @@ public class BankAccountServiceImpl implements BankAccountService {
         BankAccount foundBankAccount = bankAccountRepository.findBankAccountById(bankAccountId);
 
         if (FieldValidator.isNotNull(bankAccountRequest.getBalance())) {
-            if (!FieldValidator.isNotNegative(bankAccountRequest.getBalance())) {
+
+            if (FieldValidator.isNotNegative(bankAccountRequest.getBalance())) {
                 throw new BadRequestException("Balance cannot be negative");
             }
+
             foundBankAccount.setBalance(bankAccountRequest.getBalance());
         }
 
         if (FieldValidator.isNotEmpty(bankAccountRequest.getStatus())) {
+
             if (!FieldValidator.isValidBankAccountStatus(bankAccountRequest.getStatus())) {
                 throw new BadRequestException("Invalid account status");
             }
+
             foundBankAccount.setStatus(bankAccountRequest.getStatus());
         }
 
         if (FieldValidator.isNotNull(bankAccountRequest.getCurrency())) {
+
             Currency currency = currencyRepository.findCurrencyByCode(bankAccountRequest.getCurrency().getCode());
             foundBankAccount.setCurrency(currency);
         }
@@ -103,4 +108,5 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void deleteBankAccountById(UUID bankAccountId) {
         bankAccountRepository.deleteById(bankAccountId);
     }
+
 }

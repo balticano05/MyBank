@@ -1,6 +1,5 @@
 package com.pet.bank.dto.response.loan.payment;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -21,7 +21,7 @@ public class LoanPaymentDto {
 
     private BigDecimal paymentAmount;
 
-    private BigDecimal paymentDate;
+    private Date paymentDate;
 
     private String status;
 
