@@ -31,7 +31,7 @@ public class BankAccountController {
         return bankAccountService.findAllBankAccountsByUserId(userId);
     }
 
-    @GetMapping("{bankAccountId}")
+    @GetMapping("/{bankAccountId}")
     public BankAccountFullResponseDto findBankAccountById(@PathVariable UUID bankAccountId) {
         return bankAccountService.findBankAccountById(bankAccountId);
     }
@@ -43,7 +43,7 @@ public class BankAccountController {
         return bankAccountService.createBankAccountForUser(userId, bankAccountRequest);
     }
 
-    @PutMapping("{bankAccountId}")
+    @PutMapping("/{bankAccountId}")
     public BankAccountUpdateResponseDto updateBankAccountById(
             @PathVariable UUID bankAccountId,
             @RequestBody BankAccountUpdateRequestDto bankAccountUpdateRequestDto
@@ -51,7 +51,7 @@ public class BankAccountController {
         return bankAccountService.updateBankAccountById(bankAccountId, bankAccountUpdateRequestDto);
     }
 
-    @DeleteMapping("{bankAccountId}")
+    @DeleteMapping("/{bankAccountId}")
     public void deleteBankAccountById(@PathVariable UUID bankAccountId) {
         bankAccountService.deleteBankAccountById(bankAccountId);
     }

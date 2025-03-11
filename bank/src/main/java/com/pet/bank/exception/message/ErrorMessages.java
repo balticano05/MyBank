@@ -13,7 +13,9 @@ public enum ErrorMessages {
     LOAN_NOT_FOUND("Loan with id %s not found"),
     CARD_NOT_FOUND("Currency with id %s not found"),
     INVALID_REQUEST_DATA("Invalid request parameters: %s"),
-    EXCHANGE_RATE_FOR_CURRENCIES_NOT_FOUND("Exchange rate for currencies %s and %s");
+    EXCHANGE_RATE_FOR_CURRENCIES_NOT_FOUND("Exchange rate for currencies %s and %s"),
+    CREDENTIAL_NOT_FOUND("Credential with id %s not found"),
+    THERE_IS_ALREADY_A_USER_WITH_SUCH_CREDENTIALS("There is already a user with such credentials");
 
     private final String message;
 

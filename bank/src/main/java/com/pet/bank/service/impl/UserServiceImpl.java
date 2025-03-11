@@ -7,8 +7,10 @@ import com.pet.bank.dto.response.user.AllUsersShortResponseDto;
 import com.pet.bank.dto.response.user.UserCreationResponseDto;
 import com.pet.bank.dto.response.user.UserFullResponseDto;
 import com.pet.bank.dto.response.user.UserUpdateResponseDto;
+import com.pet.bank.entity.Credential;
 import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
+import com.pet.bank.repository.CredentialRepository;
 import com.pet.bank.repository.UserRepository;
 import com.pet.bank.service.UserService;
 import com.pet.bank.utils.validator.FieldValidator;
@@ -24,6 +26,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CredentialRepository credentialRepository;
     private final DataValidationService dataValidationService;
 
     @Override
@@ -43,16 +46,23 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserCreationResponseDto createUser(UserCreationRequestDto userCreationRequest) {
+        dataValidationService.existsCredentialById(userCreationRequest.getCredentialId(), HttpStatus.NOT_FOUND);
+        dataValidationService.existsUserByCredentialId(userCreationRequest.getCredentialId(), HttpStatus.BAD_REQUEST);
+
+        Credential foundCredential = credentialRepository.findCredentialById(userCreationRequest.getCredentialId());
+
         User newUser = UserMapper.mapUserCreationRequestDtoToEntity(userCreationRequest);
 
-        userRepository.save(newUser);
+        newUser.setCredential(foundCredential);
+
+        newUser = userRepository.save(newUser);
 
         return UserMapper.mapEntityToUserCreationResponseDto(newUser);
     }
 
     @Override
     @Transactional
-    public UserUpdateResponseDto updateUserById(UUID userId, UserUpdateRequestDto userUpdateRequestDto) {
+    public UserUpdateResponseDto updateUserById(UUID userId,UserUpdateRequestDto userUpdateRequestDto) {
         dataValidationService.existsUserById(userId, HttpStatus.NOT_FOUND);
 
         User user = userRepository.findUserById(userId);

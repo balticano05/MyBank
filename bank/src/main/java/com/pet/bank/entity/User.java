@@ -1,5 +1,6 @@
 package com.pet.bank.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -49,9 +50,8 @@ public class User {
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "credential_id", referencedColumnName = "id")
     private Credential credential;
 
     @OneToMany(fetch = FetchType.LAZY)

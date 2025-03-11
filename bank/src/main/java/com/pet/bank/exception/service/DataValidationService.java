@@ -19,4 +19,8 @@ public interface DataValidationService {
 
     void existsExchangeRate(Currency fromCurrency, Currency toCurrency,  HttpStatus status);
 
+    void existsCredentialById(UUID credentialId, HttpStatus status);
+
+    void existsUserByCredentialId(UUID credentialId, HttpStatus status);
+
 }

@@ -43,9 +43,6 @@ public class Credential {
     @Column(name = "password")
     private String password;
 
-    @OneToOne(mappedBy = "credential", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private User user;
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "credentials_roles",

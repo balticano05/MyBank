@@ -1,11 +1,13 @@
 package com.pet.bank.exception.service.impl;
 
+import com.pet.bank.entity.Credential;
 import com.pet.bank.entity.Currency;
 import com.pet.bank.exception.message.ErrorMessages;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.exception.type.ClientException;
 import com.pet.bank.repository.BankAccountRepository;
 import com.pet.bank.repository.CardRepository;
+import com.pet.bank.repository.CredentialRepository;
 import com.pet.bank.repository.CurrencyRepository;
 import com.pet.bank.repository.ExchangeRateRepository;
 import com.pet.bank.repository.LoanRepository;
@@ -24,6 +26,7 @@ public class DataValidationServiceImpl implements DataValidationService {
     private final CardRepository cardRepository;
     private final LoanRepository loanRepository;
     private final CurrencyRepository currencyRepository;
+    private final CredentialRepository credentialRepository;
     private final BankAccountRepository bankAccountRepository;
     private final ExchangeRateRepository exchangeRateRepository;
 
@@ -87,4 +90,23 @@ public class DataValidationServiceImpl implements DataValidationService {
         }
     }
 
+    @Override
+    public void existsCredentialById(UUID credentialId, HttpStatus status) {
+        if (!credentialRepository.existsById(credentialId)) {
+            throw ClientException.builder()
+                    .message(ErrorMessages.CREDENTIAL_NOT_FOUND.format(credentialId))
+                    .httpStatus(status)
+                    .build();
+        }
+    }
+
+    @Override
+    public void existsUserByCredentialId(UUID credentialId, HttpStatus status) {
+        if(userRepository.existsUserByCredentialId(credentialId)){
+            throw ClientException.builder()
+                    .message(ErrorMessages.THERE_IS_ALREADY_A_USER_WITH_SUCH_CREDENTIALS.getMessage())
+                    .httpStatus(status)
+                    .build();
+        }
+    }
 }

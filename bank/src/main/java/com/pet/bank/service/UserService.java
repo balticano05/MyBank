@@ -11,9 +11,9 @@ import java.util.UUID;
 
 public interface UserService {
 
-    UserFullResponseDto findUserById(UUID userId);
-
     AllUsersShortResponseDto findAllUsers();
+
+    UserFullResponseDto findUserById(UUID userId);
 
     UserCreationResponseDto createUser(UserCreationRequestDto userCreationRequest);
 
