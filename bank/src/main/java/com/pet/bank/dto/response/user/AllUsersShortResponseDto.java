@@ -1,7 +1,6 @@
 package com.pet.bank.dto.response.user;
 
 import com.pet.bank.dto.response.user.nested.UserShortDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

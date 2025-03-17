@@ -2,16 +2,16 @@ package com.pet.bank.service.impl;
 
 import com.pet.bank.dto.mapper.LoanMapper;
 import com.pet.bank.dto.request.RepayLoanRequestDto;
-import com.pet.bank.dto.response.loan.AllUserLoansResponseDto;
 import com.pet.bank.dto.request.loan.LoanCreationRequestDto;
+import com.pet.bank.dto.response.loan.AllUserLoansResponseDto;
 import com.pet.bank.dto.response.loan.LoanCreationResponseDto;
 import com.pet.bank.dto.response.loan.LoanFullResponseDto;
 import com.pet.bank.entity.BankAccount;
 import com.pet.bank.entity.Loan;
 import com.pet.bank.entity.LoanPayment;
+import com.pet.bank.entity.User;
 import com.pet.bank.entity.enums.LoanPaymentStatus;
 import com.pet.bank.entity.enums.LoanStatus;
-import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.exception.type.BadRequestException;
 import com.pet.bank.repository.BankAccountRepository;

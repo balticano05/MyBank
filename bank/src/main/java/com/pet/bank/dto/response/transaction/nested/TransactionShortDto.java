@@ -1,7 +1,6 @@
 package com.pet.bank.dto.response.transaction.nested;
 
 import com.pet.bank.dto.response.currency.CurrencyShortDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
