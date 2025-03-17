@@ -1,0 +1,37 @@
+services:
+
+  db:
+    image: 'postgres:16-alpine'
+    hostname: database
+    container_name: postgres_container
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    volumes:
+      - local_db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  app:
+    build: .
+    container_name: bank_app
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env/app.env
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+volumes:
+  local_db_data:
+
+networks:
+  app-network:
+    driver: bridge
