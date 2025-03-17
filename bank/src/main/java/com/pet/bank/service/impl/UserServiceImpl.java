@@ -10,7 +10,6 @@ import com.pet.bank.dto.response.user.UserUpdateResponseDto;
 import com.pet.bank.entity.Credential;
 import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
-import com.pet.bank.exception.type.BadRequestException;
 import com.pet.bank.repository.CredentialRepository;
 import com.pet.bank.repository.UserRepository;
 import com.pet.bank.service.UserService;
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Service

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CurrencyMapper {
 
-    public static AllCurrenciesResponseDto mapCurrenciesToAllCurrenciesResponseDto(List<Currency> source){
+    public static AllCurrenciesResponseDto mapCurrenciesToAllCurrenciesResponseDto(List<Currency> source) {
         return AllCurrenciesResponseDto.builder()
                 .currencies(source.stream()
                         .map(CurrencyMapper::mapEntityToCurrencyDto)
@@ -16,7 +16,7 @@ public class CurrencyMapper {
                 .build();
     }
 
-    public static Currency mapCurrencyDtoToEntity(CurrencyDto source){
+    public static Currency mapCurrencyDtoToEntity(CurrencyDto source) {
         return Currency.builder()
                 .id(source.getId())
                 .code(source.getCode())
@@ -24,7 +24,7 @@ public class CurrencyMapper {
                 .build();
     }
 
-    public static CurrencyDto mapEntityToCurrencyDto(Currency source){
+    public static CurrencyDto mapEntityToCurrencyDto(Currency source) {
         return CurrencyDto.builder()
                 .id(source.getId())
                 .code(source.getCode())

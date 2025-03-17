@@ -3,8 +3,8 @@ package com.pet.bank.dto.mapper;
 import com.pet.bank.dto.response.currency.CurrencyShortDto;
 import com.pet.bank.dto.response.loan.AllUserLoansResponseDto;
 import com.pet.bank.dto.response.loan.LoanCreationResponseDto;
-import com.pet.bank.dto.response.loan.nested.LoanDto;
 import com.pet.bank.dto.response.loan.LoanFullResponseDto;
+import com.pet.bank.dto.response.loan.nested.LoanDto;
 import com.pet.bank.dto.response.loan.nested.LoanShortDto;
 import com.pet.bank.entity.Loan;
 

@@ -16,7 +16,7 @@ public interface DataValidationService {
 
     void existsLoanById(UUID loanId, HttpStatus status);
 
-    void existsExchangeRate(String fromCurrencyCode, String toCurrencyCode,  HttpStatus status);
+    void existsExchangeRate(String fromCurrencyCode, String toCurrencyCode, HttpStatus status);
 
     void existsCredentialById(UUID credentialId, HttpStatus status);
 

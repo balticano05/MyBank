@@ -196,7 +196,7 @@ public class BankAccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andExpect(status().isOk())
-                 .andExpect(jsonPath("$.balance").value("2000.0"))
+                .andExpect(jsonPath("$.balance").value("2000.0"))
                 .andExpect(jsonPath("$.status").value("INACTIVE"));
     }
 
