@@ -1,5 +1,6 @@
 package com.pet.bank.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,8 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RepayLoanRequestDto {
 
-    private UUID bankAccountId;
-
+    @NotNull(message = "Amount is required")
     private BigDecimal amount;
 
 }

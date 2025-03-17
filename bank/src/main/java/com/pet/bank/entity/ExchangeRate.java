@@ -43,7 +43,7 @@ public class ExchangeRate {
     @Column(name = "rate")
     private BigDecimal rate;
 
-    @Column(name = "date")
+    @Column(name = "actual_date")
     private LocalDateTime actualDate;
 
 }

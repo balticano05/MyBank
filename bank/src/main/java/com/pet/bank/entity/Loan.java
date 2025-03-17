@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -63,5 +64,14 @@ public class Loan {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "loan")
     private List<LoanPayment> loanPayments;
+
+    public void addLoanPayment(LoanPayment payment) {
+
+        if (this.loanPayments == null) {
+            this.loanPayments = new ArrayList<>();
+        }
+
+        this.loanPayments.add(payment);
+    }
 
 }

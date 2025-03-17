@@ -31,7 +31,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
@@ -50,7 +49,7 @@ public class UserControllerTest {
     @Autowired
     private CredentialRepository credentialRepository;
 
-    private Credential createCredentialsForTesting(){
+    private Credential createCredentialsTest() {
         return Credential.builder()
                 .login("XASWE312")
                 .email("asd@gmail.com")
@@ -58,7 +57,7 @@ public class UserControllerTest {
                 .build();
     }
 
-    private User createUserForTesting(){
+    private User createUserTest() {
         return User.builder()
                 .firstName("John")
                 .lastName("Doe")
@@ -72,10 +71,10 @@ public class UserControllerTest {
     @SneakyThrows
     public void findAllUsersTest() {
 
-        Credential credential = createCredentialsForTesting();
+        Credential credential = createCredentialsTest();
         credentialRepository.save(credential);
 
-        User user = createUserForTesting();
+        User user = createUserTest();
         user.setCredential(credential);
 
         userRepository.save(user);
@@ -88,12 +87,12 @@ public class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void findUserByIdValidIdRequestShouldReturnUserTest(){
+    void findUserByIdValidIdRequestShouldReturnUserTest() {
 
-        Credential credential = createCredentialsForTesting();
+        Credential credential = createCredentialsTest();
         credentialRepository.save(credential);
 
-        User user = createUserForTesting();
+        User user = createUserTest();
         user.setCredential(credential);
 
         user = userRepository.save(user);
@@ -108,7 +107,7 @@ public class UserControllerTest {
     @SneakyThrows
     void createUserValidRequestShouldCreateUserTest() {
 
-        Credential credential = createCredentialsForTesting();
+        Credential credential = createCredentialsTest();
         credential = credentialRepository.save(credential);
 
         UserCreationRequestDto requestDto = UserCreationRequestDto.builder()
@@ -133,10 +132,10 @@ public class UserControllerTest {
     @SneakyThrows
     void updateUserValidRequestShouldUpdateUser() {
 
-        Credential credential = createCredentialsForTesting();
+        Credential credential = createCredentialsTest();
         credentialRepository.save(credential);
 
-        User user = createUserForTesting();
+        User user = createUserTest();
         user.setCredential(credential);
 
         user = userRepository.save(user);
@@ -161,10 +160,10 @@ public class UserControllerTest {
     @SneakyThrows
     void deleteUserByValidIdShouldDeleteUser() {
 
-        Credential credential = createCredentialsForTesting();
+        Credential credential = createCredentialsTest();
         credentialRepository.save(credential);
 
-        User user = createUserForTesting();
+        User user = createUserTest();
         user.setCredential(credential);
 
         user = userRepository.save(user);
@@ -176,16 +175,18 @@ public class UserControllerTest {
     }
 
     @Test
-    void findUserByInvalidIdShouldReturnNotFound() throws Exception {
+    @SneakyThrows
+    void findUserByInvalidIdShouldReturnNotFound() {
         UUID invalidId = UUID.randomUUID();
         mockMvc.perform(get("/api/v1/users/{userId}", invalidId))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void createUserInvalidRequestShouldReturnBadRequest() throws Exception {
+    @SneakyThrows
+    void createUserInvalidRequestShouldReturnBadRequest() {
 
-        Credential credential = createCredentialsForTesting();
+        Credential credential = createCredentialsTest();
         credentialRepository.save(credential);
 
         UserCreationRequestDto requestDto = UserCreationRequestDto.builder()

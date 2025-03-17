@@ -13,7 +13,7 @@ public class FieldValidator {
     }
 
     public boolean isNotNegative(BigDecimal value) {
-        return value == null || value.compareTo(BigDecimal.ZERO) < 0;
+        return value != null && value.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     public boolean isNotNull(Object value) {
@@ -25,20 +25,14 @@ public class FieldValidator {
     }
 
     public boolean isValidBankAccountStatus(String status) {
-
         if (status == null) {
-
             return false;
         }
-
         for (BankAccountStatus accountStatus : BankAccountStatus.values()) {
             if (accountStatus.getValue().equals(status)) {
-
                 return true;
             }
         }
-
         return false;
     }
-
 }

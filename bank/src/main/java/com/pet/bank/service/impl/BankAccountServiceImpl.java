@@ -8,10 +8,8 @@ import com.pet.bank.dto.response.bank.account.BankAccountCreationResponse;
 import com.pet.bank.dto.response.bank.account.BankAccountFullResponseDto;
 import com.pet.bank.dto.response.bank.account.BankAccountUpdateResponseDto;
 import com.pet.bank.entity.BankAccount;
-import com.pet.bank.entity.Currency;
 import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
-import com.pet.bank.exception.type.BadRequestException;
 import com.pet.bank.repository.BankAccountRepository;
 import com.pet.bank.repository.CurrencyRepository;
 import com.pet.bank.repository.UserRepository;
@@ -46,6 +44,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public BankAccountFullResponseDto findBankAccountById(UUID bankAccountId) {
 
+        dataValidationService.existsBankAccountById(bankAccountId, HttpStatus.NOT_FOUND);
+
         BankAccount foundBankAccount = bankAccountRepository.findBankAccountById(bankAccountId);
 
         return BankAccountMapper.mapEntityToBankAccountFullResponseDto(foundBankAccount);
@@ -55,9 +55,13 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     public BankAccountCreationResponse createBankAccountForUser(UUID userId, BankAccountCreationRequestDto bankAccountRequest) {
 
+        dataValidationService.existsUserById(userId, HttpStatus.NOT_FOUND);
+        dataValidationService.existsCurrencyByCode(bankAccountRequest.getCurrency().getCode(), HttpStatus.NOT_FOUND);
+
         User foundUser = userRepository.findUserById(userId);
 
         BankAccount newBankAccount = BankAccountMapper.mapBankAccountCreationRequestDtoToEntity(bankAccountRequest);
+        newBankAccount.setOwner(foundUser);
         newBankAccount.setCreatedAt(new Date());
 
         bankAccountRepository.save(newBankAccount);
@@ -69,34 +73,21 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     public BankAccountUpdateResponseDto updateBankAccountById(UUID bankAccountId, BankAccountUpdateRequestDto bankAccountRequest) {
 
-        dataValidationService.existsUserById(bankAccountRequest.getOwner().getId(), HttpStatus.NOT_FOUND);
         dataValidationService.existsBankAccountById(bankAccountId, HttpStatus.NOT_FOUND);
         dataValidationService.existsCurrencyByCode(bankAccountRequest.getCurrency().getCode(), HttpStatus.NOT_FOUND);
 
         BankAccount foundBankAccount = bankAccountRepository.findBankAccountById(bankAccountId);
 
-        if (FieldValidator.isNotNull(bankAccountRequest.getBalance())) {
-
-            if (FieldValidator.isNotNegative(bankAccountRequest.getBalance())) {
-                throw new BadRequestException("Balance cannot be negative");
-            }
-
+        if (FieldValidator.isNotNegative(bankAccountRequest.getBalance())) {
             foundBankAccount.setBalance(bankAccountRequest.getBalance());
         }
 
-        if (FieldValidator.isNotEmpty(bankAccountRequest.getStatus())) {
-
-            if (!FieldValidator.isValidBankAccountStatus(bankAccountRequest.getStatus())) {
-                throw new BadRequestException("Invalid account status");
-            }
-
+        if (FieldValidator.isValidBankAccountStatus(bankAccountRequest.getStatus())) {
             foundBankAccount.setStatus(bankAccountRequest.getStatus());
         }
 
-        if (FieldValidator.isNotNull(bankAccountRequest.getCurrency())) {
-
-            Currency currency = currencyRepository.findCurrencyByCode(bankAccountRequest.getCurrency().getCode());
-            foundBankAccount.setCurrency(currency);
+        if (FieldValidator.isNotEmpty(bankAccountRequest.getCurrency().getCode())) {
+            foundBankAccount.setCurrency(currencyRepository.findCurrencyByCode(bankAccountRequest.getCurrency().getCode()));
         }
 
         BankAccount updatedAccount = bankAccountRepository.save(foundBankAccount);
@@ -106,6 +97,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public void deleteBankAccountById(UUID bankAccountId) {
+
+        dataValidationService.existsBankAccountById(bankAccountId, HttpStatus.NOT_FOUND);
+
         bankAccountRepository.deleteById(bankAccountId);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -22,9 +23,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.status(status)
-                .body(new ErrorResponse(status, "Internal server error"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"));
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
@@ -42,6 +42,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST, errorMessage));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingParams(MissingServletRequestParameterException ex) {
+
+        String message = "Required parameter '" + ex.getParameterName() + "' is missing";
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, message);
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

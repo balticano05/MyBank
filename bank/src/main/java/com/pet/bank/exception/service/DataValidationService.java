@@ -1,6 +1,5 @@
 package com.pet.bank.exception.service;
 
-import com.pet.bank.entity.Currency;
 import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
@@ -17,10 +16,12 @@ public interface DataValidationService {
 
     void existsLoanById(UUID loanId, HttpStatus status);
 
-    void existsExchangeRate(Currency fromCurrency, Currency toCurrency,  HttpStatus status);
+    void existsExchangeRate(String fromCurrencyCode, String toCurrencyCode,  HttpStatus status);
 
     void existsCredentialById(UUID credentialId, HttpStatus status);
 
     void existsUserByCredentialId(UUID credentialId, HttpStatus status);
+
+    void existsTransactionWithBankAccount(UUID bankAccountId, UUID transactionId, HttpStatus status);
 
 }

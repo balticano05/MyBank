@@ -7,7 +7,9 @@ import com.pet.bank.dto.response.bank.account.BankAccountCreationResponse;
 import com.pet.bank.dto.response.bank.account.BankAccountFullResponseDto;
 import com.pet.bank.dto.response.bank.account.BankAccountUpdateResponseDto;
 import com.pet.bank.service.BankAccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -32,14 +35,15 @@ public class BankAccountController {
     }
 
     @GetMapping("/{bankAccountId}")
-    public BankAccountFullResponseDto findBankAccountById(@PathVariable UUID bankAccountId) {
+    public BankAccountFullResponseDto findBankAccountById(@Valid @PathVariable UUID bankAccountId) {
         return bankAccountService.findBankAccountById(bankAccountId);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BankAccountCreationResponse createBankAccountForUser(
             @PathVariable UUID userId,
-            @RequestBody BankAccountCreationRequestDto bankAccountRequest) {
+            @Valid @RequestBody BankAccountCreationRequestDto bankAccountRequest) {
         return bankAccountService.createBankAccountForUser(userId, bankAccountRequest);
     }
 
@@ -52,6 +56,7 @@ public class BankAccountController {
     }
 
     @DeleteMapping("/{bankAccountId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBankAccountById(@PathVariable UUID bankAccountId) {
         bankAccountService.deleteBankAccountById(bankAccountId);
     }

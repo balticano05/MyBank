@@ -13,6 +13,7 @@ import com.pet.bank.entity.enums.LoanPaymentStatus;
 import com.pet.bank.entity.enums.LoanStatus;
 import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
+import com.pet.bank.exception.type.BadRequestException;
 import com.pet.bank.repository.BankAccountRepository;
 import com.pet.bank.repository.CurrencyRepository;
 import com.pet.bank.repository.LoanRepository;
@@ -44,6 +45,8 @@ public class LoanServiceImpl implements LoanService {
     }
 
     public LoanFullResponseDto findLoanById(UUID loanId) {
+        dataValidationService.existsLoanById(loanId, HttpStatus.NOT_FOUND);
+
         return LoanMapper.mapEntityToFullResponseDto(loanRepository.findLoanById(loanId));
     }
 
@@ -53,23 +56,23 @@ public class LoanServiceImpl implements LoanService {
 
         dataValidationService.existsUserById(userId, HttpStatus.NOT_FOUND);
         dataValidationService.existsBankAccountById(bankId, HttpStatus.NOT_FOUND);
-        dataValidationService.existsCurrencyByCode(loanRequest.getCurrency().getCode(), HttpStatus.NOT_FOUND);
+        dataValidationService.existsCurrencyByCode(loanRequest.getCurrencyCode(), HttpStatus.NOT_FOUND);
 
         User user = userRepository.findUserById(userId);
         BankAccount bankAccount = bankAccountRepository.findBankAccountById(bankId);
 
         validateLoanRequest(loanRequest);
 
-        Loan loan = new Loan();
-        loan.setUser(user);
-        loan.setBankAccount(bankAccount);
-        loan.setCurrency(currencyRepository.findCurrencyByCode(loanRequest.getCurrency().getCode()));
-
-        loan.setAmount(loanRequest.getAmount());
-        loan.setInterestRate(loanRequest.getInterestRate());
-        loan.setStartDate(loanRequest.getStartDate());
-        loan.setEndDate(loanRequest.getEndDate());
-        loan.setStatus(LoanStatus.ACTIVE.getValue());
+        Loan loan = Loan.builder()
+                .user(user)
+                .bankAccount(bankAccount)
+                .currency(currencyRepository.findCurrencyByCode(loanRequest.getCurrencyCode()))
+                .amount(loanRequest.getAmount())
+                .interestRate(loanRequest.getInterestRate())
+                .startDate(loanRequest.getStartDate())
+                .endDate(loanRequest.getEndDate())
+                .status(LoanStatus.ACTIVE.getValue())
+                .build();
 
         return LoanMapper.mapEntityToLoanCreationResponseDto(loanRepository.save(loan));
     }
@@ -79,20 +82,23 @@ public class LoanServiceImpl implements LoanService {
     public void repayForLoan(UUID loanId, RepayLoanRequestDto repayLoanRequest) {
 
         dataValidationService.existsLoanById(loanId, HttpStatus.NOT_FOUND);
-        dataValidationService.existsBankAccountById(repayLoanRequest.getBankAccountId(), HttpStatus.NOT_FOUND);
 
         Loan loan = loanRepository.findLoanById(loanId);
-        BankAccount bankAccount = bankAccountRepository.findBankAccountById(repayLoanRequest.getBankAccountId());
+
+        dataValidationService.existsBankAccountById(loan.getBankAccount().getId(), HttpStatus.NOT_FOUND);
+
+        BankAccount bankAccount = bankAccountRepository.findBankAccountById(loan.getBankAccount().getId());
 
         validateRepayment(loan, repayLoanRequest, bankAccount);
 
-        LoanPayment payment = new LoanPayment();
-        payment.setPaymentAmount(repayLoanRequest.getAmount());
-        payment.setPaymentDate(new Date());
-        payment.setLoan(loan);
-        payment.setStatus(LoanPaymentStatus.COMPLETED.getValue());
+        LoanPayment payment = LoanPayment.builder()
+                .paymentAmount(repayLoanRequest.getAmount())
+                .paymentDate(new Date())
+                .loan(loan)
+                .status(LoanPaymentStatus.COMPLETED.getValue())
+                .build();
 
-        loan.getLoanPayments().add(payment);
+        loan.addLoanPayment(payment);
 
         if (isLoanFullyRepaid(loan)) {
             loan.setStatus(LoanStatus.REPAID.getValue());
@@ -102,59 +108,56 @@ public class LoanServiceImpl implements LoanService {
 
     private void validateLoanRequest(LoanCreationRequestDto loanRequest) {
 
-        if (!FieldValidator.isNotNull(loanRequest.getAmount()) ||
-                loanRequest.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
+        if (!FieldValidator.isNotNegative(loanRequest.getAmount())) {
+            throw new BadRequestException("Amount must be positive");
         }
 
-        if (!FieldValidator.isNotNull(loanRequest.getCurrency())) {
-            throw new IllegalArgumentException("Currency is required");
+        if (!FieldValidator.isNotNull(loanRequest.getCurrencyCode())) {
+            throw new BadRequestException("Currency is required");
         }
 
-        if (FieldValidator.isNotNegative(loanRequest.getInterestRate())) {
-            throw new IllegalArgumentException("Interest rate must be non-negative");
+        if (!FieldValidator.isNotNegative(loanRequest.getInterestRate())) {
+            throw new BadRequestException("Interest rate must be non-negative");
         }
 
         if (!FieldValidator.isNotNull(loanRequest.getStartDate())) {
-            throw new IllegalArgumentException("Start date is required");
+            throw new BadRequestException("Start date is required");
         }
 
         if (!FieldValidator.isNotNull(loanRequest.getEndDate())) {
-            throw new IllegalArgumentException("End date is required");
+            throw new BadRequestException("End date is required");
         }
 
         if (loanRequest.getEndDate().before(loanRequest.getStartDate())) {
-            throw new IllegalArgumentException("End date must be after start date");
+            throw new BadRequestException("End date must be after start date");
         }
     }
 
     private void validateRepayment(Loan loan, RepayLoanRequestDto request, BankAccount account) {
 
-        if (!"ACTIVE".equals(loan.getStatus())) {
-            throw new IllegalStateException("Loan is not active");
+        if (!LoanStatus.ACTIVE.getValue().equals(loan.getStatus())) {
+            throw new BadRequestException("Loan is not active");
         }
 
-        if (FieldValidator.isNotNegative(request.getAmount()) ||
-                request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Invalid payment amount");
+        if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BadRequestException("Invalid payment amount");
         }
 
         if (account.getBalance().compareTo(request.getAmount()) < 0) {
-            throw new IllegalArgumentException("Insufficient funds");
+            throw new BadRequestException("Insufficient funds");
         }
     }
 
     private boolean isLoanFullyRepaid(Loan loan) {
 
-        double totalPaid = loan.getLoanPayments().stream()
-                .mapToDouble(payment -> payment.getPaymentAmount().doubleValue()) // Преобразуем BigDecimal в double
-                .sum();
+        BigDecimal totalPaid = loan.getLoanPayments().stream()
+                .map(LoanPayment::getPaymentAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        double totalToRepay = loan.getAmount()
-                .multiply(BigDecimal.ONE.add(loan.getInterestRate().divide(BigDecimal.valueOf(100))))
-                .doubleValue();
+        BigDecimal totalToRepay = loan.getAmount()
+                .multiply(BigDecimal.ONE.add(loan.getInterestRate().divide(BigDecimal.valueOf(100))));
 
-        return totalPaid >= totalToRepay;
+        return totalPaid.compareTo(totalToRepay) >= 0;
     }
 
 }

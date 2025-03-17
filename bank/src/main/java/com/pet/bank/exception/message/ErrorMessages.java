@@ -15,6 +15,7 @@ public enum ErrorMessages {
     INVALID_REQUEST_DATA("Invalid request parameters: %s"),
     EXCHANGE_RATE_FOR_CURRENCIES_NOT_FOUND("Exchange rate for currencies %s and %s"),
     CREDENTIAL_NOT_FOUND("Credential with id %s not found"),
+    THERE_IS_NO_TRANSACTION_FOR_SUCH_BANK_ACCOUNT("There is no transaction for such account"),
     THERE_IS_ALREADY_A_USER_WITH_SUCH_CREDENTIALS("There is already a user with such credentials");
 
     private final String message;

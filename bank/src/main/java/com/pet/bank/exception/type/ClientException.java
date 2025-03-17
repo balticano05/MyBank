@@ -10,4 +10,5 @@ public class ClientException extends AbstractException {
     protected ClientException(String message, HttpStatus httpStatus) {
         super(message, httpStatus);
     }
+
 }

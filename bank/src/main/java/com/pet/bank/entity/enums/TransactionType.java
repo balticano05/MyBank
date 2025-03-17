@@ -3,14 +3,14 @@ package com.pet.bank.entity.enums;
 import lombok.Getter;
 
 @Getter
-public enum LoanPaymentStatus {
+public enum TransactionType {
 
-    FAILED("FAILED"),
-    COMPLETED("COMPLETED");
+    TRANSFER("TRANSFER"),
+    DEPOSIT("DEPOSIT");
 
     private final String value;
 
-    LoanPaymentStatus(String value) {
+    TransactionType(String value) {
         this.value = value;
     }
 

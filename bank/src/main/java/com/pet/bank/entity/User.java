@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -54,7 +53,7 @@ public class User {
     @JoinColumn(name = "credential_id", referencedColumnName = "id")
     private Credential credential;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccount> bankAccounts;
 
     @OneToMany(fetch = FetchType.LAZY)

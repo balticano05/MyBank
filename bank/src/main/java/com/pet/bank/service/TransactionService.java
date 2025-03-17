@@ -9,6 +9,6 @@ public interface TransactionService {
 
     AllBankAccountTransactionsResponseDto findAllTransactionsByBankAccountId(UUID bankAccountId);
 
-    TransactionInfoResponseDto findTransactionById(UUID transactionId);
+    TransactionInfoResponseDto findTransactionById(UUID bankAccountId, UUID transactionId);
 
 }

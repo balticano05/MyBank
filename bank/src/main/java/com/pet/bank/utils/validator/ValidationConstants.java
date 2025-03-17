@@ -21,4 +21,13 @@ public class ValidationConstants {
     public static final String ADDRESS_LENGTH_MESSAGE =
             "Address must not exceed " + MAX_ADDRESS_LENGTH + " characters";
 
+    public static final String BANK_ACCOUNT_STATUS_REGEX = "^(ACTIVE|INACTIVE|BLOCKED)$";
+    public static final String BANK_ACCOUNT_STATUS_MESSAGE = "Invalid account status. Allowed values: ACTIVE, INACTIVE, BLOCKED";
+
+    public static final int CURRENCY_CODE_LENGTH = 3;
+    public static final String CURRENCY_CODE_MESSAGE = "Currency code must be 3 characters";
+
+    public static final String CARD_NUMBER_REGEX = "^\\d{16}$";
+    public static final String CARD_NUMBER_MESSAGE = "Card number must be 16 digits";
+
 }

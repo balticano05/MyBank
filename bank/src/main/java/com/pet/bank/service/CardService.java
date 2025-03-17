@@ -10,7 +10,7 @@ public interface CardService {
 
     AllBankAccountCardsResponseDto findAllBankAccountCards();
 
-    CardCreationResponseDto createCard(CardCreationRequestDto cardRequest);
+    CardCreationResponseDto createCard(UUID bankAccountId, CardCreationRequestDto cardRequest);
 
     void deleteCardById(UUID cardId);
 

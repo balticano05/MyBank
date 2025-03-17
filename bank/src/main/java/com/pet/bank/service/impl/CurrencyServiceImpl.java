@@ -4,7 +4,6 @@ import com.pet.bank.dto.mapper.CurrencyMapper;
 import com.pet.bank.dto.mapper.ExchangeMapper;
 import com.pet.bank.dto.response.currency.AllCurrenciesResponseDto;
 import com.pet.bank.dto.response.exchange.rate.ExchangeRateResponseDto;
-import com.pet.bank.entity.Currency;
 import com.pet.bank.entity.ExchangeRate;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.repository.CurrencyRepository;
@@ -21,9 +20,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CurrencyServiceImpl implements CurrencyService {
 
-    private CurrencyRepository currencyRepository;
-    private DataValidationService dataValidationService;
-    private ExchangeRateRepository exchangeRateRepository;
+    private final CurrencyRepository currencyRepository;
+    private final DataValidationService dataValidationService;
+    private final ExchangeRateRepository exchangeRateRepository;
 
     @Override
     public AllCurrenciesResponseDto findAllCurrencies() {
@@ -33,25 +32,20 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public ExchangeRateResponseDto getExchangeRate(String fromCode, String toCode) {
 
-
         dataValidationService.existsCurrencyByCode(fromCode, HttpStatus.NOT_FOUND);
         dataValidationService.existsCurrencyByCode(toCode, HttpStatus.NOT_FOUND);
-
-        Currency base = currencyRepository.findCurrencyByCode(fromCode);
-        Currency target = currencyRepository.findCurrencyByCode(toCode);
-
-        dataValidationService.existsExchangeRate(base, target, HttpStatus.NOT_FOUND);
+        dataValidationService.existsExchangeRate(fromCode, toCode, HttpStatus.NOT_FOUND);
 
         if (fromCode.equalsIgnoreCase(toCode)) {
             return ExchangeRateResponseDto.builder()
                     .fromCurrency(fromCode)
-                    .toCurrency(fromCode)
+                    .toCurrency(toCode)
                     .exchangeRate(BigDecimal.ONE)
                     .dateTime(LocalDateTime.now())
                     .build();
         }
 
-        ExchangeRate directRate = exchangeRateRepository.findByBaseCurrencyAndTargetCurrency(base, target);
+        ExchangeRate directRate = exchangeRateRepository.findByBaseCurrency_CodeAndTargetCurrency_Code(fromCode, toCode);
 
         return ExchangeMapper.mapEntityToExchangeResponseDto(directRate);
     }

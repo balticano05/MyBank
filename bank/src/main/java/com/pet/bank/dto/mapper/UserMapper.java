@@ -14,7 +14,7 @@ import java.util.List;
 
 public class UserMapper {
 
-    public static UserShortDto mapEntityToUserShortDto(User source){
+    public static UserShortDto mapEntityToUserShortDto(User source) {
         return UserShortDto.builder()
                 .id(source.getId())
                 .firstName(source.getFirstName())
@@ -25,7 +25,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static UserCreationResponseDto mapEntityToUserCreationResponseDto(User source){
+    public static UserCreationResponseDto mapEntityToUserCreationResponseDto(User source) {
         return UserCreationResponseDto.builder()
                 .id(source.getId())
                 .firstName(source.getFirstName())
@@ -36,7 +36,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static UserUpdateResponseDto mapEntityToUserUpdateResponseDto(User source){
+    public static UserUpdateResponseDto mapEntityToUserUpdateResponseDto(User source) {
         return UserUpdateResponseDto.builder()
                 .id(source.getId())
                 .firstName(source.getFirstName())
@@ -47,7 +47,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static User mapUserCreationRequestDtoToEntity(UserCreationRequestDto source){
+    public static User mapUserCreationRequestDtoToEntity(UserCreationRequestDto source) {
         return User.builder()
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())
@@ -58,13 +58,13 @@ public class UserMapper {
 
     }
 
-    public static UserFullResponseDto mapEntityToUserFullResponseDto(User source){
+    public static UserFullResponseDto mapEntityToUserFullResponseDto(User source) {
         return UserFullResponseDto.builder()
                 .user(mapEntityToUserFullDto(source))
                 .build();
     }
 
-    private static UserFullDto mapEntityToUserFullDto(User source){
+    private static UserFullDto mapEntityToUserFullDto(User source) {
         return UserFullDto.builder()
                 .id(source.getId())
                 .firstName(source.getFirstName())
@@ -77,15 +77,15 @@ public class UserMapper {
                 .build();
     }
 
-    public static AllUsersShortResponseDto mapEntitiesToAllUserShortResponseDto(List<User> source){
+    public static AllUsersShortResponseDto mapEntitiesToAllUserShortResponseDto(List<User> source) {
         return AllUsersShortResponseDto.builder()
                 .users(mapEntitiesToUserShortDtoList(source))
                 .build();
     }
 
-    private static List<UserShortDto> mapEntitiesToUserShortDtoList(List<User> source){
+    private static List<UserShortDto> mapEntitiesToUserShortDtoList(List<User> source) {
 
-        if(source == null)
+        if (source == null)
             return new ArrayList<>();
 
         return source.stream()
