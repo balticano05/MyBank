@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/users/{userId}/accounts/{bankAccountId}/transactions")
+@RequestMapping("/api/v1/users/{userId}/accounts/{bankAccountId}/transactions")
 @RequiredArgsConstructor
 public class TransactionController {
 

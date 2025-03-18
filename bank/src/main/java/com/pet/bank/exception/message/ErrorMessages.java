@@ -16,7 +16,8 @@ public enum ErrorMessages {
     EXCHANGE_RATE_FOR_CURRENCIES_NOT_FOUND("Exchange rate for currencies %s and %s"),
     CREDENTIAL_NOT_FOUND("Credential with id %s not found"),
     THERE_IS_NO_TRANSACTION_FOR_SUCH_BANK_ACCOUNT("There is no transaction for such account"),
-    THERE_IS_ALREADY_A_USER_WITH_SUCH_CREDENTIALS("There is already a user with such credentials");
+    THERE_IS_ALREADY_A_USER_WITH_SUCH_CREDENTIALS("There is already a user with such credentials"),
+    USER_WITH_LOGIN_NOT_FOUND("User with login not found: %s");
 
     private final String message;
 

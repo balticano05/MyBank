@@ -135,7 +135,7 @@ public class TransactionControllerTest {
 
         Transaction transaction = transactionRepository.save(createTransactionTest(accountFrom, accountTo, new BigDecimal("100")));
 
-        mockMvc.perform(get("/api/users/{userId}/accounts/{bankAccountId}/transactions", user.getId(), accountFrom.getId()))
+        mockMvc.perform(get("/api/v1/users/{userId}/accounts/{bankAccountId}/transactions", user.getId(), accountFrom.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.transactions", hasSize(1)))
                 .andExpect(jsonPath("$.transactions[0].id").value(transaction.getId().toString()))
@@ -171,7 +171,7 @@ public class TransactionControllerTest {
         UUID randomUserId = UUID.randomUUID();
         UUID randomAccountId = UUID.randomUUID();
 
-        mockMvc.perform(get("/api/users/{userId}/accounts/{bankAccountId}/transactions", randomUserId, randomAccountId))
+        mockMvc.perform(get("/api/v1/users/{userId}/accounts/{bankAccountId}/transactions", randomUserId, randomAccountId))
                 .andExpect(status().isNotFound());
     }
 
@@ -192,7 +192,7 @@ public class TransactionControllerTest {
 
         UUID randomTransactionId = UUID.randomUUID();
 
-        mockMvc.perform(get("/api/users/{userId}/accounts/{bankAccountId}/transactions/{transactionId}",
+        mockMvc.perform(get("/api/v1/users/{userId}/accounts/{bankAccountId}/transactions/{transactionId}",
                         user.getId(), accountFrom.getId(), randomTransactionId))
                 .andExpect(status().isNotFound());
     }
@@ -212,7 +212,7 @@ public class TransactionControllerTest {
 
         Transaction transaction = createTransactionTest(accountFrom, accountTo, new BigDecimal("200"));
 
-        mockMvc.perform(get("/api/users/{userId}/accounts/{bankAccountId}/transactions/{transactionId}",
+        mockMvc.perform(get("/api/v1/users/{userId}/accounts/{bankAccountId}/transactions/{transactionId}",
                         user.getId(), UUID.randomUUID(), transaction.getId()))
                 .andExpect(status().isNotFound());
     }

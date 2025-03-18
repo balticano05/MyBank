@@ -2,6 +2,10 @@ package com.pet.bank.exception.handler;
 
 import com.pet.bank.exception.AbstractException;
 import com.pet.bank.exception.response.ErrorResponse;
+import com.pet.bank.exception.type.AuthenticationFailedException;
+import com.pet.bank.exception.type.CustomIOException;
+import com.pet.bank.exception.type.CustomServletException;
+import com.pet.bank.exception.type.MissingTokenException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +55,24 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, message);
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({AuthenticationFailedException.class, MissingTokenException.class})
+    public ResponseEntity<ErrorResponse> handleJwtExceptions(AbstractException ex) {
+        return ResponseEntity.status(ex.getHttpStatus())
+                .body(new ErrorResponse(ex.getHttpStatus(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(CustomIOException.class)
+    public ResponseEntity<ErrorResponse> handleCustomIOException(CustomIOException ex) {
+        return ResponseEntity.status(ex.getHttpStatus())
+                .body(new ErrorResponse(ex.getHttpStatus(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(CustomServletException.class)
+    public ResponseEntity<ErrorResponse> handleCustomServletException(CustomServletException ex) {
+        return ResponseEntity.status(ex.getHttpStatus())
+                .body(new ErrorResponse(ex.getHttpStatus(), ex.getMessage()));
     }
 
 }

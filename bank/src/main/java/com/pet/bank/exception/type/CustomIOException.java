@@ -4,11 +4,11 @@ import com.pet.bank.exception.AbstractException;
 import lombok.Builder;
 import org.springframework.http.HttpStatus;
 
-public class ClientException extends AbstractException {
+public class CustomIOException extends AbstractException {
 
     @Builder
-    protected ClientException(String message, HttpStatus httpStatus) {
-        super(message, httpStatus);
+    public CustomIOException(String message) {
+        super(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

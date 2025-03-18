@@ -41,6 +41,16 @@ public class DataValidationServiceImpl implements DataValidationService {
     }
 
     @Override
+    public void existsCredentialByLogin(String login, HttpStatus status) {
+        if (!credentialRepository.existsCredentialByLogin(login)) {
+            throw ClientException.builder()
+                    .message(ErrorMessages.USER_WITH_LOGIN_NOT_FOUND.format(login))
+                    .httpStatus(status)
+                    .build();
+        }
+    }
+
+    @Override
     public void existsBankAccountById(UUID bankAccountId, HttpStatus status) {
         if (!bankAccountRepository.existsById(bankAccountId)) {
             throw ClientException.builder()

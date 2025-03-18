@@ -8,6 +8,8 @@ public interface DataValidationService {
 
     void existsUserById(UUID userId, HttpStatus status);
 
+    void existsCredentialByLogin(String login, HttpStatus status);
+
     void existsBankAccountById(UUID bankAccountId, HttpStatus status);
 
     void existsCurrencyByCode(String code, HttpStatus status);

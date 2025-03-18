@@ -7,6 +7,10 @@ import java.util.UUID;
 
 public interface CredentialRepository extends JpaRepository<Credential, UUID> {
 
+    boolean existsCredentialByLogin(String login);
+
+    Credential findCredentialByLogin(String login);
+
     Credential findCredentialById(UUID credentialId);
 
 }
