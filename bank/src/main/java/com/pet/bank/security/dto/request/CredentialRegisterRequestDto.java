@@ -1,6 +1,5 @@
 package com.pet.bank.security.dto.request;
 
-import com.pet.bank.security.dto.request.nested.RolesIdDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +18,5 @@ public class CredentialRegisterRequestDto {
     private String email;
 
     private String password;
-
-    private RolesIdDto roles;
 
 }

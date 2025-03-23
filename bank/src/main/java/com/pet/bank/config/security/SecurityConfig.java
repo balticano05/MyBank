@@ -2,9 +2,8 @@ package com.pet.bank.config.security;
 
 import com.pet.bank.exception.type.SecurityConfigurationException;
 import com.pet.bank.security.filter.JwtAuthFilter;
-import com.pet.bank.security.service.impl.CustomUserDetailsService;
-import com.pet.bank.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,8 +13,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,24 +29,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter authFilter;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final AuthenticationConfiguration authConfiguration;
+
+    @Bean
+    public AuthenticationManager authenticationManager(){
+        try {
+            return authConfiguration.getAuthenticationManager();
+        } catch (Exception e) {
+            throw new SecurityConfigurationException("Failed to configure authentication manager: " + e.getMessage());
+        }
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
 
         try {
-            httpSecurity.csrf(AbstractHttpConfigurer::disable)
+            httpSecurity
+                    .csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(authFilter -> {
                         authFilter.requestMatchers(
                                 "/api/v1/auth/authenticate",
-                                "/api/v1/register"
+                                "/api/v1/auth/register"
                         ).permitAll();
                     }).authorizeHttpRequests(authFilter -> {
                         authFilter.requestMatchers("/api/v1/users/**").authenticated();
                     })
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                    .authenticationProvider(authenticationProvider());
+                    .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+//                    .authenticationProvider(authenticationProvider());
 
             return httpSecurity.build();
         } catch (Exception e) {
@@ -54,28 +65,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-        authProvider.setUserDetailsService(customUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-
-        return authProvider;
-    }
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
-        try {
-            return config.getAuthenticationManager();
-        } catch (Exception e) {
-            throw new SecurityConfigurationException("Failed to configure authentication manager: " + e.getMessage());
-        }
     }
 
 }

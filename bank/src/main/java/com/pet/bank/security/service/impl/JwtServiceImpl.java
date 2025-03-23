@@ -5,7 +5,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 public class JwtServiceImpl implements JwtService {
 
@@ -26,7 +29,11 @@ public class JwtServiceImpl implements JwtService {
 
     public String generateToken(String login) {
 
+        log.warn("Generating token for user: {}", login);
+
         Map<String, Object> claims = new HashMap<>();
+
+        log.info("Token generated successfully for user: {}", login);
 
         return createToken(claims, login);
     }
@@ -37,7 +44,7 @@ public class JwtServiceImpl implements JwtService {
                 .subject(login)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(getSignKey(), Jwts.SIG.HS256)
+                .signWith(getSignKey())
                 .compact();
     }
 
@@ -78,9 +85,18 @@ public class JwtServiceImpl implements JwtService {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
 
-        final String login = extractLogin(token);
+        log.warn("Validating token for user: {}", userDetails.getUsername());
 
-        return (login.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String login = extractLogin(token);
+        boolean isValid = login.equals(userDetails.getUsername()) && !isTokenExpired(token);
+
+        if (isValid) {
+            log.info("Token validated successfully for user: {}", login);
+        } else {
+            log.error("Token validation failed for user: {}", login);
+        }
+
+        return isValid;
     }
 
 }
