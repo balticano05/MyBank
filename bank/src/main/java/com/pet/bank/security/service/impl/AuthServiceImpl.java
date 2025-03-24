@@ -42,7 +42,6 @@ public class AuthServiceImpl implements AuthService {
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(roleRepository.findRoleByTitle("User"));
 
-        log.info("Count of roles in database: {}", roleRepository.count());
         log.info("Simple user role was found: {}", userRoles.getFirst().getTitle());
 
         Credential credential = Credential.builder()
@@ -58,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
 
         String jwtToken = jwtService.generateToken(credential.getLogin());
 
-        log.info("Token: {}", jwtToken);
+        log.info("Token generated successfully");
 
         return CredentialAuthResponseDto.builder()
                 .token(jwtToken)

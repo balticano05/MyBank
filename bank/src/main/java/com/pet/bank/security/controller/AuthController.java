@@ -1,6 +1,5 @@
 package com.pet.bank.security.controller;
 
-import com.pet.bank.annotations.Loggable;
 import com.pet.bank.security.dto.request.CredentialAuthRequestDto;
 import com.pet.bank.security.dto.request.CredentialRegisterRequestDto;
 import com.pet.bank.security.dto.response.CredentialAuthResponseDto;
@@ -23,7 +22,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Loggable
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public CredentialAuthResponseDto register(@RequestBody CredentialRegisterRequestDto credentialAuthRequest) {

@@ -3,20 +3,15 @@ package com.pet.bank.config.security;
 import com.pet.bank.exception.type.SecurityConfigurationException;
 import com.pet.bank.security.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,7 +27,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authConfiguration;
 
     @Bean
-    public AuthenticationManager authenticationManager(){
+    public AuthenticationManager authenticationManager() {
         try {
             return authConfiguration.getAuthenticationManager();
         } catch (Exception e) {
@@ -49,14 +44,14 @@ public class SecurityConfig {
                     .authorizeHttpRequests(authFilter -> {
                         authFilter.requestMatchers(
                                 "/api/v1/auth/authenticate",
-                                "/api/v1/auth/register"
+                                "/api/v1/auth/register",
+                                "/api/v1/currencies"
                         ).permitAll();
                     }).authorizeHttpRequests(authFilter -> {
                         authFilter.requestMatchers("/api/v1/users/**").authenticated();
                     })
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
-//                    .authenticationProvider(authenticationProvider());
 
             return httpSecurity.build();
         } catch (Exception e) {
