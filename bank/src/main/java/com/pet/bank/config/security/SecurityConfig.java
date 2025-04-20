@@ -5,6 +5,7 @@ import com.pet.bank.security.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -42,13 +43,25 @@ public class SecurityConfig {
             httpSecurity
                     .csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(authFilter -> {
+
                         authFilter.requestMatchers(
-                                "/api/v1/auth/authenticate",
                                 "/api/v1/auth/register",
-                                "/api/v1/currencies"
+                                "/api/v1/auth/login"
                         ).permitAll();
+
+                        authFilter.requestMatchers(
+                                HttpMethod.GET, "/api/v1/currencies/**"
+                        ).permitAll();
+
+                        authFilter.requestMatchers("/api/v1/users/**"
+                        ).authenticated();
+
                     }).authorizeHttpRequests(authFilter -> {
-                        authFilter.requestMatchers("/api/v1/users/**").authenticated();
+                        authFilter
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/{userId}").hasAnyRole("ADMIN", "CONSULTANT")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users").hasAnyRole("ADMIN", "CONSULTANT")
+
                     })
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

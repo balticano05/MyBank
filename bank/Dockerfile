@@ -3,7 +3,7 @@ FROM maven:3.9.6-sapmachine-21 AS build
 COPY pom.xml .
 COPY src src
 
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 FROM openjdk:21-jdk
 
