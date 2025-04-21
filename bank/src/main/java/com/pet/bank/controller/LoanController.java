@@ -9,6 +9,7 @@ import com.pet.bank.service.LoanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +39,7 @@ public class LoanController {
 
     @PostMapping("/{bankId}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('ADMIN', 'CONSULTANT')")
     public LoanCreationResponseDto createLoanForUser(
             @PathVariable UUID userId,
             @PathVariable UUID bankId,

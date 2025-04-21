@@ -11,4 +11,14 @@
                  relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="insert-currencies-exchange-rates" author="Aleks">
+        <sqlFile encoding="utf8" path="./insert-entities/13.insert-currencies.sql"
+                 relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert-admins" author="Aleks">
+        <sqlFile encoding="utf8" path="./insert-entities/14.insert-admin.sql"
+                 relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

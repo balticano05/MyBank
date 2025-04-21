@@ -4,6 +4,6 @@
 
     <include file="classpath:db/changelog/initial-schema.xml" relativeToChangelogFile="false"/>
     
-    <include file="classpath:db/changelog/insert-roles.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:db/changelog/insert-entities.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

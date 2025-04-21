@@ -1,6 +1,7 @@
 package com.pet.bank.service;
 
 import com.pet.bank.dto.request.user.UserCreationRequestDto;
+import com.pet.bank.dto.request.user.UserSearchParametersRequest;
 import com.pet.bank.dto.request.user.UserUpdateRequestDto;
 import com.pet.bank.dto.response.user.AllUsersShortResponseDto;
 import com.pet.bank.dto.response.user.UserCreationResponseDto;
@@ -11,14 +12,12 @@ import java.util.UUID;
 
 public interface UserService {
 
-    AllUsersShortResponseDto findAllUsers();
-
-    UserFullResponseDto findUserById(UUID userId);
+    AllUsersShortResponseDto findAllUsersByParameters(UserSearchParametersRequest userSearchParametersRequest);
 
     UserCreationResponseDto createUser(UserCreationRequestDto userCreationRequest);
 
     UserUpdateResponseDto updateUserById(UUID userId, UserUpdateRequestDto userUpdateRequestDto);
 
-    void deleteUserById(UUID userId);
+    UUID deleteUserById(UUID userId);
 
 }

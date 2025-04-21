@@ -96,11 +96,13 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public void deleteBankAccountById(UUID bankAccountId) {
+    public UUID deleteBankAccountById(UUID bankAccountId) {
 
         dataValidationService.existsBankAccountById(bankAccountId, HttpStatus.NOT_FOUND);
 
         bankAccountRepository.deleteById(bankAccountId);
+
+        return bankAccountId;
     }
 
 }

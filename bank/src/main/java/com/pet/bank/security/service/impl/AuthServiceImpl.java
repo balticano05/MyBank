@@ -2,6 +2,7 @@ package com.pet.bank.security.service.impl;
 
 import com.pet.bank.entity.Credential;
 import com.pet.bank.entity.Role;
+import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.repository.CredentialRepository;
 import com.pet.bank.repository.RoleRepository;
@@ -40,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     public CredentialAuthResponseDto register(CredentialRegisterRequestDto registerRequestDto) {
 
         List<Role> userRoles = new ArrayList<>();
-        userRoles.add(roleRepository.findRoleByTitle("User"));
+        userRoles.add(roleRepository.findRoleByTitle("USER"));
 
         log.info("Simple user role was found: {}", userRoles.getFirst().getTitle());
 
@@ -51,7 +52,15 @@ public class AuthServiceImpl implements AuthService {
                 .roles(userRoles)
                 .build();
 
-        credentialRepository.save(credential);
+        User user = User.builder()
+                .firstName(registerRequestDto.getFirstName())
+                .lastName(registerRequestDto.getLastName())
+                .address(registerRequestDto.getAddress())
+                .phoneNumber(registerRequestDto.getPhoneNumber())
+                .credential(credential)
+                .build();
+
+        userRepository.save(user);
 
         log.info("User registered successfully: {}", credential.getLogin());
 
@@ -77,6 +86,7 @@ public class AuthServiceImpl implements AuthService {
         dataValidationService.existsCredentialByLogin(credentialAuthRequestDto.getLogin(), HttpStatus.NOT_FOUND);
 
         Credential credential = credentialRepository.findCredentialByLogin(credentialAuthRequestDto.getLogin());
+
         String jwtToken = jwtService.generateToken(credential.getLogin());
 
         log.info("User authenticated successfully: {}", credential.getLogin());

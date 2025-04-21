@@ -2,6 +2,7 @@ package com.pet.bank.service.impl;
 
 import com.pet.bank.dto.mapper.UserMapper;
 import com.pet.bank.dto.request.user.UserCreationRequestDto;
+import com.pet.bank.dto.request.user.UserSearchParametersRequest;
 import com.pet.bank.dto.request.user.UserUpdateRequestDto;
 import com.pet.bank.dto.response.user.AllUsersShortResponseDto;
 import com.pet.bank.dto.response.user.UserCreationResponseDto;
@@ -12,36 +13,62 @@ import com.pet.bank.entity.User;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.repository.CredentialRepository;
 import com.pet.bank.repository.UserRepository;
+import com.pet.bank.service.LinkService;
 import com.pet.bank.service.UserService;
 import com.pet.bank.utils.validator.FieldValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final LinkService linkService;
     private final UserRepository userRepository;
     private final CredentialRepository credentialRepository;
     private final DataValidationService dataValidationService;
 
     @Override
-    public AllUsersShortResponseDto findAllUsers() {
-        return UserMapper.mapEntitiesToAllUserShortResponseDto(userRepository.findAll());
-    }
+    public AllUsersShortResponseDto findAllUsersByParameters(UserSearchParametersRequest userSearchParametersRequest) {
 
-    @Override
-    public UserFullResponseDto findUserById(UUID userId) {
+        Specification<User> specification = Specification.where(null);
 
-        dataValidationService.existsUserById(userId, HttpStatus.NOT_FOUND);
+        if(userSearchParametersRequest.getFirstName() != null && !userSearchParametersRequest.getFirstName().isEmpty()) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("firstName").as(String.class), userSearchParametersRequest.getFirstName())));
+        }
 
-        User foundUser = userRepository.findUserById(userId);
+        if(userSearchParametersRequest.getLastName() != null && !userSearchParametersRequest.getLastName().isEmpty()) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("lastName").as(String.class), userSearchParametersRequest.getLastName())));
+        }
 
-        return UserMapper.mapEntityToUserFullResponseDto(foundUser);
+        if(userSearchParametersRequest.getDateOfBirth() != null) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("dateOfBirth").as(String.class), userSearchParametersRequest.getDateOfBirth())));
+        }
+
+        if(userSearchParametersRequest.getPhoneNumber() != null && !userSearchParametersRequest.getPhoneNumber().isEmpty()) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("phoneNumber").as(String.class), userSearchParametersRequest.getPhoneNumber())));
+        }
+
+        if(userSearchParametersRequest.getAddress() != null && !userSearchParametersRequest.getAddress().isEmpty()) {
+            specification = specification.and(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("address").as(String.class), userSearchParametersRequest.getAddress())));
+        }
+
+        List<User> users = userRepository.findAll(specification);
+        AllUsersShortResponseDto allUsersShortResponseDto = UserMapper.mapEntitiesToAllUserShortResponseDto(users);
+
+        return linkService.addLinksToAllUsersShortResponseDto(allUsersShortResponseDto);
     }
 
     @Override
@@ -92,11 +119,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(UUID userid) {
+    public UUID deleteUserById(UUID userid) {
 
         dataValidationService.existsUserById(userid, HttpStatus.NOT_FOUND);
 
         userRepository.deleteById(userid);
+
+        return userid;
     }
 
 }

@@ -1,0 +1,39 @@
+package com.pet.bank.dto.request.user;
+
+import com.pet.bank.utils.validator.ValidationConstants;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+import java.util.Date;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserSearchParametersRequest {
+
+    @Size(
+            min = ValidationConstants.MIN_NAME_LENGTH,
+            max = ValidationConstants.MAX_NAME_LENGTH,
+            message = ValidationConstants.NAME_LENGTH_MESSAGE
+    )
+    private String firstName;
+
+    @Size(
+            min = ValidationConstants.MIN_NAME_LENGTH,
+            max = ValidationConstants.MAX_NAME_LENGTH,
+            message = ValidationConstants.NAME_LENGTH_MESSAGE
+    )
+    private String lastName;
+
+    @Pattern(regexp = ValidationConstants.PHONE_REGEX, message = ValidationConstants.PHONE_MESSAGE)
+    private String phoneNumber;
+
+    @Size(max = ValidationConstants.MAX_ADDRESS_LENGTH, message = ValidationConstants.ADDRESS_LENGTH_MESSAGE)
+    private String address;
+
+    @Past(message = "Date of birth must be in the past")
+    private Date dateOfBirth;
+
+}

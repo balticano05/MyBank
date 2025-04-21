@@ -24,6 +24,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AbstractException.class)
     public ResponseEntity<ErrorResponse> handleAbstractException(AbstractException ex) {
 
+        ex.printStackTrace();
+
+
         log.error(ex.getMessage());
 
         return ResponseEntity.status(ex.getHttpStatus())
@@ -32,6 +35,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
+
+        ex.printStackTrace();
 
         log.error(ex.getMessage());
 
@@ -42,6 +47,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<ErrorResponse> handleEmptyResult(EmptyResultDataAccessException ex) {
 
+        ex.printStackTrace();
+
         log.error(ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -50,6 +57,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+
+        ex.printStackTrace();
 
         log.error(ex.getMessage());
 
@@ -64,6 +73,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingParams(MissingServletRequestParameterException ex) {
 
+        ex.printStackTrace();
+
         log.error(ex.getMessage());
 
         String message = "Required parameter '" + ex.getParameterName() + "' is missing";
@@ -75,6 +86,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({AuthenticationFailedException.class, MissingTokenException.class})
     public ResponseEntity<ErrorResponse> handleJwtExceptions(AbstractException ex) {
 
+        ex.printStackTrace();
+
         log.error(ex.getMessage());
 
         return ResponseEntity.status(ex.getHttpStatus())
@@ -84,6 +97,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomIOException.class)
     public ResponseEntity<ErrorResponse> handleCustomIOException(CustomIOException ex) {
 
+        ex.printStackTrace();
+
         log.error(ex.getMessage());
 
         return ResponseEntity.status(ex.getHttpStatus())
@@ -92,6 +107,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomServletException.class)
     public ResponseEntity<ErrorResponse> handleCustomServletException(CustomServletException ex) {
+
+        ex.printStackTrace();
 
         log.error(ex.getMessage());
 

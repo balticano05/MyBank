@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AllUserBankAccountsResponseDto {
+public class AllUserBankAccountsResponseDto extends RepresentationModel<AllUserBankAccountsResponseDto> {
 
     private List<BankAccountDto> bankAccounts;
 

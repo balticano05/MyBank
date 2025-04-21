@@ -7,6 +7,7 @@ import com.pet.bank.dto.response.bank.account.BankAccountCreationResponse;
 import com.pet.bank.dto.response.bank.account.BankAccountFullResponseDto;
 import com.pet.bank.dto.response.bank.account.BankAccountUpdateResponseDto;
 import com.pet.bank.service.BankAccountService;
+import com.pet.bank.service.LinkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BankAccountController {
 
+    private final LinkService linkService;
     private final BankAccountService bankAccountService;
 
     @GetMapping
     public AllUserBankAccountsResponseDto findAllBankAccounts(@PathVariable UUID userId) {
-        return bankAccountService.findAllBankAccountsByUserId(userId);
+        AllUserBankAccountsResponseDto allUserBankAccountsResponseDto = bankAccountService.findAllBankAccountsByUserId(userId);
+        return linkService.addLinksToAllUserBankAccountsResponseDto(allUserBankAccountsResponseDto, userId);
     }
 
     @GetMapping("/{bankAccountId}")
@@ -57,8 +60,8 @@ public class BankAccountController {
 
     @DeleteMapping("/{bankAccountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBankAccountById(@PathVariable UUID bankAccountId) {
-        bankAccountService.deleteBankAccountById(bankAccountId);
+    public UUID deleteBankAccountById(@PathVariable UUID bankAccountId) {
+        return bankAccountService.deleteBankAccountById(bankAccountId);
     }
 
 }

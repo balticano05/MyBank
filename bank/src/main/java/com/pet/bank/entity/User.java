@@ -56,7 +56,12 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccount> bankAccounts;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<Loan> loans;
 
 }

@@ -19,6 +19,6 @@ public interface BankAccountService {
 
     BankAccountUpdateResponseDto updateBankAccountById(UUID bankAccountId, BankAccountUpdateRequestDto bankAccountRequest);
 
-    void deleteBankAccountById(UUID bankAccountId);
+    UUID deleteBankAccountById(UUID bankAccountId);
 
 }
