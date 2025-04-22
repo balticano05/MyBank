@@ -33,15 +33,6 @@
                  relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="initial-cards" author="Aleks">
-        <sqlFile encoding="utf8" path="./initial-schema/07.create-cards-table.sql" relativeToChangelogFile="true"/>
-    </changeSet>
-
-    <changeSet id="initial-transactions" author="Aleks">
-        <sqlFile encoding="utf8" path="./initial-schema/08.create-transactions-table.sql"
-                 relativeToChangelogFile="true"/>
-    </changeSet>
-
     <changeSet id="initial-exchange-rates" author="Aleks">
         <sqlFile encoding="utf8" path="./initial-schema/09.create-exchange-rates-table.sql"
                  relativeToChangelogFile="true"/>

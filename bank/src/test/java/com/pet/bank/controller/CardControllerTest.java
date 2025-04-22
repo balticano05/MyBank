@@ -3,13 +3,11 @@ package com.pet.bank.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pet.bank.dto.request.card.CardCreationRequestDto;
 import com.pet.bank.entity.BankAccount;
-import com.pet.bank.entity.Card;
 import com.pet.bank.entity.Credential;
 import com.pet.bank.entity.Currency;
 import com.pet.bank.entity.User;
 import com.pet.bank.entity.enums.BankAccountStatus;
 import com.pet.bank.repository.BankAccountRepository;
-import com.pet.bank.repository.CardRepository;
 import com.pet.bank.repository.CredentialRepository;
 import com.pet.bank.repository.CurrencyRepository;
 import com.pet.bank.repository.UserRepository;
@@ -29,11 +27,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

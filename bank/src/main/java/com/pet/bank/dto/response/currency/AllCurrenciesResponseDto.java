@@ -1,11 +1,7 @@
 package com.pet.bank.dto.response.currency;
 
 import com.pet.bank.dto.response.currency.nested.CurrencyDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 

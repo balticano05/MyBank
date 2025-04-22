@@ -20,7 +20,6 @@ public class BankAccountMapper {
                 .balance(source.getBalance())
                 .status(source.getStatus())
                 .currency(source.getCurrency())
-                .cards(CardMapper.mapEntitiesToListCardDto(source.getCards()))
                 .build();
     }
 
@@ -42,7 +41,6 @@ public class BankAccountMapper {
                 .balance(source.getBalance())
                 .status(source.getStatus())
                 .currency(CurrencyMapper.mapEntityToCurrencyDto(source.getCurrency()))
-                .cards(CardMapper.mapEntitiesToListCardDto(source.getCards()))
                 .build();
     }
 
@@ -54,7 +52,6 @@ public class BankAccountMapper {
                 .balance(source.getBalance())
                 .status(source.getStatus())
                 .currency(CurrencyMapper.mapEntityToCurrencyDto(source.getCurrency()))
-                .cards(CardMapper.mapEntitiesToListCardDto(source.getCards()))
                 .loans(LoanMapper.mapEntitiesToListLoanShortDto(source.getLoans()))
                 .build();
     }
@@ -63,7 +60,6 @@ public class BankAccountMapper {
         return BankAccount.builder()
                 .balance(source.getBalance())
                 .status(source.getStatus())
-                .currency(CurrencyMapper.mapCurrencyDtoToEntity(source.getCurrency()))
                 .build();
     }
 

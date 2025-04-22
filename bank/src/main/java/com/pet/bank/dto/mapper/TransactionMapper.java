@@ -3,7 +3,6 @@ package com.pet.bank.dto.mapper;
 import com.pet.bank.dto.response.transaction.AllBankAccountTransactionsResponseDto;
 import com.pet.bank.dto.response.transaction.TransactionInfoResponseDto;
 import com.pet.bank.dto.response.transaction.nested.TransactionShortDto;
-import com.pet.bank.entity.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;

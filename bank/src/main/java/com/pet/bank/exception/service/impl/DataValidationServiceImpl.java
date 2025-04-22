@@ -3,14 +3,7 @@ package com.pet.bank.exception.service.impl;
 import com.pet.bank.exception.message.ErrorMessages;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.exception.type.ClientException;
-import com.pet.bank.repository.BankAccountRepository;
-import com.pet.bank.repository.CardRepository;
-import com.pet.bank.repository.CredentialRepository;
-import com.pet.bank.repository.CurrencyRepository;
-import com.pet.bank.repository.ExchangeRateRepository;
-import com.pet.bank.repository.LoanRepository;
-import com.pet.bank.repository.TransactionRepository;
-import com.pet.bank.repository.UserRepository;
+import com.pet.bank.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -22,7 +15,6 @@ import java.util.UUID;
 public class DataValidationServiceImpl implements DataValidationService {
 
     private final UserRepository userRepository;
-    private final CardRepository cardRepository;
     private final LoanRepository loanRepository;
     private final CurrencyRepository currencyRepository;
     private final CredentialRepository credentialRepository;
@@ -65,16 +57,6 @@ public class DataValidationServiceImpl implements DataValidationService {
         if (!currencyRepository.existsCurrencyByCode(code)) {
             throw ClientException.builder()
                     .message(ErrorMessages.CURRENCY_WITH_CODE_NOT_FOUND.format(code))
-                    .httpStatus(status)
-                    .build();
-        }
-    }
-
-    @Override
-    public void existsCardById(UUID cardId, HttpStatus status) {
-        if (!cardRepository.existsById(cardId)) {
-            throw ClientException.builder()
-                    .message(ErrorMessages.CARD_NOT_FOUND.format(cardId))
                     .httpStatus(status)
                     .build();
         }

@@ -2,11 +2,8 @@ package com.pet.bank.dto.response.loan.nested;
 
 import com.pet.bank.dto.response.loan.payment.LoanPaymentDto;
 import com.pet.bank.entity.Currency;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,7 +15,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanDto {
+public class LoanDto extends RepresentationModel<LoanDto> {
 
     private UUID id;
 

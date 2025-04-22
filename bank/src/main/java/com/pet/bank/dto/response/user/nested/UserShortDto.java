@@ -1,10 +1,6 @@
 package com.pet.bank.dto.response.user.nested;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;

@@ -5,39 +5,36 @@ import com.pet.bank.dto.request.loan.LoanCreationRequestDto;
 import com.pet.bank.dto.response.loan.AllUserLoansResponseDto;
 import com.pet.bank.dto.response.loan.LoanCreationResponseDto;
 import com.pet.bank.dto.response.loan.LoanFullResponseDto;
+import com.pet.bank.service.LinkService;
 import com.pet.bank.service.LoanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/users/{userId}/loans")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class LoanController {
 
+    private final LinkService linkService;
     private final LoanService loanService;
 
-    @GetMapping
+    @GetMapping("/{userId}/loans")
     public AllUserLoansResponseDto findAllLoansByUserId(@PathVariable UUID userId) {
-        return loanService.findAllLoansByUserId(userId);
+        AllUserLoansResponseDto allUserLoansResponseDto = loanService.findAllLoansByUserId(userId);
+        return linkService.addLinksToAllUserLoansResponseDto(allUserLoansResponseDto, userId);
     }
 
-    @GetMapping("/{loanId}")
+    @GetMapping("/{userId}/loans/{loanId}")
     public LoanFullResponseDto findLoanById(@PathVariable UUID loanId) {
         return loanService.findLoanById(loanId);
     }
 
-    @PostMapping("/{bankId}")
+    @PostMapping("/{userId}/loans/{bankId}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('ADMIN', 'CONSULTANT')")
     public LoanCreationResponseDto createLoanForUser(
@@ -47,7 +44,7 @@ public class LoanController {
         return loanService.createLoanForUser(userId, bankId, loanRequest);
     }
 
-    @PostMapping("/{loanId}/repayments")
+    @PostMapping("/{userId}/loans/{loanId}/repayments")
     public void repayForLoan(@PathVariable UUID loanId,
                              @RequestBody @Valid RepayLoanRequestDto repayLoanRequest) {
         loanService.repayForLoan(loanId, repayLoanRequest);

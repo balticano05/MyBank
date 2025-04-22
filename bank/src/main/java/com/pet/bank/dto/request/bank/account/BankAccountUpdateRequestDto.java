@@ -1,19 +1,13 @@
 package com.pet.bank.dto.request.bank.account;
 
-import com.pet.bank.dto.response.card.nested.CardDto;
 import com.pet.bank.dto.response.currency.nested.CurrencyDto;
 import com.pet.bank.utils.validator.ValidationConstants;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
@@ -31,7 +25,5 @@ public class BankAccountUpdateRequestDto {
 
     @Valid
     private CurrencyDto currency;
-
-    private List<CardDto> cards;
 
 }

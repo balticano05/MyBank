@@ -56,11 +56,13 @@ public class BankAccountServiceImpl implements BankAccountService {
     public BankAccountCreationResponse createBankAccountForUser(UUID userId, BankAccountCreationRequestDto bankAccountRequest) {
 
         dataValidationService.existsUserById(userId, HttpStatus.NOT_FOUND);
-        dataValidationService.existsCurrencyByCode(bankAccountRequest.getCurrency().getCode(), HttpStatus.NOT_FOUND);
+        dataValidationService.existsCurrencyByCode(bankAccountRequest.getCode(), HttpStatus.NOT_FOUND);
 
         User foundUser = userRepository.findUserById(userId);
 
         BankAccount newBankAccount = BankAccountMapper.mapBankAccountCreationRequestDtoToEntity(bankAccountRequest);
+
+        newBankAccount.setCurrency(currencyRepository.findCurrencyByCode(bankAccountRequest.getCode()));
         newBankAccount.setOwner(foundUser);
         newBankAccount.setCreatedAt(new Date());
 

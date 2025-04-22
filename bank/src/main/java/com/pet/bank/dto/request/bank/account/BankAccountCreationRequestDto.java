@@ -1,17 +1,12 @@
 package com.pet.bank.dto.request.bank.account;
 
-import com.pet.bank.dto.response.currency.nested.CurrencyDto;
 import com.pet.bank.utils.validator.ValidationConstants;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -33,6 +28,6 @@ public class BankAccountCreationRequestDto {
 
     @Valid
     @NotNull(message = "Currency is required")
-    private CurrencyDto currency;
+    private String code;
 
 }

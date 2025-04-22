@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(registerRequestDto.getLastName())
                 .address(registerRequestDto.getAddress())
                 .phoneNumber(registerRequestDto.getPhoneNumber())
+                .dateOfBirth(registerRequestDto.getDateOfBirth())
                 .credential(credential)
                 .build();
 

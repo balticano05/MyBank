@@ -1,10 +1,8 @@
 package com.pet.bank.controller;
 
 import com.pet.bank.dto.request.user.UserSearchParametersRequest;
-import com.pet.bank.dto.request.user.UserCreationRequestDto;
 import com.pet.bank.dto.request.user.UserUpdateRequestDto;
 import com.pet.bank.dto.response.user.AllUsersShortResponseDto;
-import com.pet.bank.dto.response.user.UserCreationResponseDto;
 import com.pet.bank.dto.response.user.UserUpdateResponseDto;
 import com.pet.bank.service.UserService;
 import jakarta.validation.Valid;
@@ -27,12 +25,12 @@ public class UserController {
         return userService.findAllUsersByParameters(userSearchParametersRequest);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('ADMIN', 'CONSULTANT')")
-    public UserCreationResponseDto createUser(@Valid @RequestBody UserCreationRequestDto userCreationRequest) {
-        return userService.createUser(userCreationRequest);
-    }
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PreAuthorize("hasAnyRole('ADMIN', 'CONSULTANT')")
+//    public UserCreationResponseDto createUser(@Valid @RequestBody UserCreationRequestDto userCreationRequest) {
+//        return userService.createUser(userCreationRequest);
+//    }
 
     @PutMapping("/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CONSULTANT')")

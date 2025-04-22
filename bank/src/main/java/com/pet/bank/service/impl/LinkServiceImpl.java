@@ -1,14 +1,16 @@
 package com.pet.bank.service.impl;
 
-import com.pet.bank.controller.BankAccountController;
+import com.pet.bank.controller.LoanController;
 import com.pet.bank.controller.UserController;
-import com.pet.bank.dto.request.user.UserUpdateRequestDto;
 import com.pet.bank.dto.response.bank.account.AllUserBankAccountsResponseDto;
 import com.pet.bank.dto.response.bank.account.nested.BankAccountDto;
+import com.pet.bank.dto.response.loan.AllUserLoansResponseDto;
+import com.pet.bank.dto.response.loan.nested.LoanShortDto;
 import com.pet.bank.dto.response.user.AllUsersShortResponseDto;
 import com.pet.bank.dto.response.user.nested.UserShortDto;
 import com.pet.bank.service.LinkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,37 +43,116 @@ public class LinkServiceImpl implements LinkService {
         return addCollectionLinks(allUserBankAccountsResponseDto, userId);
     }
 
+    @Override
+    public AllUserLoansResponseDto addLinksToAllUserLoansResponseDto(
+            AllUserLoansResponseDto responseDto, UUID userId) {
+
+        List<LoanShortDto> loansWithLinks = responseDto.getLoans().stream()
+                .map(loan -> addLinksToLoanShortDto(loan, userId))
+                .collect(Collectors.toList());
+
+        responseDto.setLoans(loansWithLinks);
+        return addCollectionLinks(responseDto, userId);
+    }
+
     private UserShortDto addLinksToUserShortDto(UserShortDto userShortDto) {
         return userShortDto.add(
-                // DELETE /api/v1/users/{id}
+
                 linkTo(UserController.class)
                         .slash(userShortDto.getId())
                         .withRel("delete")
                         .withType("DELETE"),
 
-                // PUT /api/v1/users/{id}
                 linkTo(UserController.class)
                         .slash(userShortDto.getId())
                         .withRel("update")
                         .withType("PUT"),
 
-                // GET /api/v1/users/{id}/accounts
                 linkTo(UserController.class)
                         .slash(userShortDto.getId())
                         .slash("accounts")
                         .withRel("accounts")
+                        .withType("GET"),
+
+                linkTo(UserController.class)
+                        .slash(userShortDto.getId())
+                        .slash("loans")
+                        .withRel("loans")
                         .withType("GET")
         );
     }
 
+    private BankAccountDto addLinksToBankAccountDto(BankAccountDto bankAccountDto, UUID userId) {
+        return bankAccountDto.add(
+
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
+                        .slash(bankAccountDto.getId())
+                        .withSelfRel()
+                        .withType("GET"),
+
+
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
+                        .slash(bankAccountDto.getId())
+                        .withRel("update-account")
+                        .withType("PUT"),
+
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
+                        .slash(bankAccountDto.getId())
+                        .withRel("delete-account")
+                        .withType("DELETE"),
+
+                linkTo(methodOn(LoanController.class)
+                        .createLoanForUser(userId, bankAccountDto.getId(), null))
+                        .withRel("create-loan")
+                        .withType("POST"),
+
+                linkTo(methodOn(LoanController.class)
+                        .findAllLoansByUserId(userId))
+                        .withRel("find-loans")
+                        .withType("GET")
+        );
+    }
+
+    private LoanShortDto addLinksToLoanShortDto(LoanShortDto loanShortDto, UUID userId) {
+        return loanShortDto.add(
+
+                linkTo(LoanController.class)
+                        .slash(userId)
+                        .slash("loans")
+                        .withSelfRel()
+                        .withType("GET"),
+
+                linkTo(LoanController.class)
+                        .slash(userId)
+                        .slash("loans")
+                        .slash(loanShortDto.getId())
+                        .withRel("delete")
+                        .withType("DELETE"),
+
+                linkTo(LoanController.class)
+                        .slash(userId)
+                        .slash("loans")
+                        .slash(loanShortDto.getId())
+                        .slash("repayments")
+                        .withRel("repay")
+                        .withType("POST")
+        );
+    }
+
+
     private AllUsersShortResponseDto addCollectionLinks(AllUsersShortResponseDto response) {
         return response.add(
-                // POST /api/v1/users
+
                 linkTo(UserController.class)
                         .withRel("create-user")
                         .withType("POST"),
 
-                // GET /api/v1/users
                 linkTo(UserController.class)
                         .withSelfRel()
         );
@@ -80,14 +161,13 @@ public class LinkServiceImpl implements LinkService {
     private AllUserBankAccountsResponseDto addCollectionLinks(
             AllUserBankAccountsResponseDto responseDto, UUID userId) {
         return responseDto.add(
-                // POST /api/v1/users/{userId}/accounts
+
                 linkTo(UserController.class)
                         .slash(userId)
                         .slash("accounts")
                         .withRel("create-account")
                         .withType("POST"),
 
-                // GET /api/v1/users/{userId}/accounts
                 linkTo(UserController.class)
                         .slash(userId)
                         .slash("accounts")
@@ -95,38 +175,20 @@ public class LinkServiceImpl implements LinkService {
         );
     }
 
-    private BankAccountDto addLinksToBankAccountDto(BankAccountDto bankAccountDto, UUID userId) {
-        return bankAccountDto.add(
-                // GET /api/v1/users/{userId}/accounts/{accountId}
-                linkTo(UserController.class)
-                        .slash(userId)
-                        .slash("accounts")
-                        .slash(bankAccountDto.getId())
-                        .withSelfRel()
-                        .withType("GET"),
 
-                // PUT /api/v1/users/{userId}/accounts/{accountId}
-                linkTo(UserController.class)
-                        .slash(userId)
-                        .slash("accounts")
-                        .slash(bankAccountDto.getId())
-                        .withRel("update-account")
-                        .withType("PUT"),
+    private AllUserLoansResponseDto addCollectionLinks(
+            AllUserLoansResponseDto responseDto, UUID userId) {
 
-                // DELETE /api/v1/users/{userId}/accounts/{accountId}
-                linkTo(UserController.class)
-                        .slash(userId)
-                        .slash("accounts")
-                        .slash(bankAccountDto.getId())
-                        .withRel("delete-account")
-                        .withType("DELETE"),
+        Link selfLink = linkTo(methodOn(LoanController.class)
+                .findAllLoansByUserId(userId))
+                .withSelfRel();
 
-                // GET /api/v1/users/{userId}/accounts
-                linkTo(UserController.class)
-                        .slash(userId)
-                        .slash("accounts")
-                        .withRel("back-to-accounts")
-                        .withType("GET")
-        );
+        Link createLink = linkTo(methodOn(LoanController.class)
+                .createLoanForUser(userId, null, null))
+                .withRel("create")
+                .withType("POST");
+
+        return responseDto.add(selfLink, createLink);
     }
+
 }

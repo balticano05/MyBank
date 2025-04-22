@@ -2,7 +2,6 @@ package com.pet.bank.controller;
 
 import com.pet.bank.dto.response.transaction.AllBankAccountTransactionsResponseDto;
 import com.pet.bank.dto.response.transaction.TransactionInfoResponseDto;
-import com.pet.bank.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

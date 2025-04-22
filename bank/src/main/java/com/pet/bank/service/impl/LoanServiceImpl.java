@@ -14,10 +14,7 @@ import com.pet.bank.entity.enums.LoanPaymentStatus;
 import com.pet.bank.entity.enums.LoanStatus;
 import com.pet.bank.exception.service.DataValidationService;
 import com.pet.bank.exception.type.BadRequestException;
-import com.pet.bank.repository.BankAccountRepository;
-import com.pet.bank.repository.CurrencyRepository;
-import com.pet.bank.repository.LoanRepository;
-import com.pet.bank.repository.UserRepository;
+import com.pet.bank.repository.*;
 import com.pet.bank.service.LoanService;
 import com.pet.bank.utils.validator.FieldValidator;
 import jakarta.transaction.Transactional;
@@ -35,6 +32,7 @@ public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;
     private final UserRepository userRepository;
+    private final LoanPaymentRepository loanPaymentRepository;
     private final CurrencyRepository currencyRepository;
     private final BankAccountRepository bankAccountRepository;
     private final DataValidationService dataValidationService;
@@ -100,6 +98,8 @@ public class LoanServiceImpl implements LoanService {
 
         loan.addLoanPayment(payment);
 
+        loanPaymentRepository.save(payment);
+
         if (isLoanFullyRepaid(loan)) {
             loan.setStatus(LoanStatus.REPAID.getValue());
         }
@@ -139,12 +139,16 @@ public class LoanServiceImpl implements LoanService {
             throw new BadRequestException("Loan is not active");
         }
 
-        if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) < 0) {
             throw new BadRequestException("Invalid payment amount");
         }
 
         if (account.getBalance().compareTo(request.getAmount()) < 0) {
             throw new BadRequestException("Insufficient funds");
+        }
+
+        if (request.getAmount().compareTo(loan.getAmount()) > 0) {
+            throw new BadRequestException("Payment amount exceeds the remaining loan amount");
         }
     }
 
