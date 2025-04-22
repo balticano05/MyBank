@@ -23,6 +23,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
@@ -79,31 +83,46 @@ public class LoanServiceImpl implements LoanService {
     @Transactional
     public void repayForLoan(UUID loanId, RepayLoanRequestDto repayLoanRequest) {
 
-        dataValidationService.existsLoanById(loanId, HttpStatus.NOT_FOUND);
+        Loan loan = null;
+        LoanPayment payment = null;
 
-        Loan loan = loanRepository.findLoanById(loanId);
+        try {
 
-        dataValidationService.existsBankAccountById(loan.getBankAccount().getId(), HttpStatus.NOT_FOUND);
+            dataValidationService.existsLoanById(loanId, HttpStatus.NOT_FOUND);
+            loan = loanRepository.findLoanById(loanId);
+            dataValidationService.existsBankAccountById(loan.getBankAccount().getId(), HttpStatus.NOT_FOUND);
+            BankAccount bankAccount = bankAccountRepository.findBankAccountById(loan.getBankAccount().getId());
 
-        BankAccount bankAccount = bankAccountRepository.findBankAccountById(loan.getBankAccount().getId());
+            payment = LoanPayment.builder()
+                    .paymentAmount(repayLoanRequest.getAmount())
+                    .paymentDate(new Date())
+                    .loan(loan)
+                    .status(LoanPaymentStatus.FAILED.getValue())
+                    .build();
 
-        validateRepayment(loan, repayLoanRequest, bankAccount);
+            validateRepayment(loan, repayLoanRequest, bankAccount);
 
-        LoanPayment payment = LoanPayment.builder()
-                .paymentAmount(repayLoanRequest.getAmount())
-                .paymentDate(new Date())
-                .loan(loan)
-                .status(LoanPaymentStatus.COMPLETED.getValue())
-                .build();
+            payment.setStatus(LoanPaymentStatus.COMPLETED.getValue());
 
-        loan.addLoanPayment(payment);
+            BigDecimal newAmount = loan.getAmount().subtract(repayLoanRequest.getAmount());
+            loan.setAmount(newAmount);
 
-        loanPaymentRepository.save(payment);
+            loan.addLoanPayment(payment);
+            loanPaymentRepository.save(payment);
+            loanRepository.save(loan);
 
-        if (isLoanFullyRepaid(loan)) {
-            loan.setStatus(LoanStatus.REPAID.getValue());
+            if (isLoanFullyRepaid(loan)) {
+                loan.setStatus(LoanStatus.REPAID.getValue());
+            }
+
+        } catch (Exception e) {
+
+            if (payment != null) {
+                payment.setStatus(LoanPaymentStatus.FAILED.getValue());
+                loanPaymentRepository.save(payment);
+            }
+            throw new BadRequestException("Payment failed: " + e.getMessage());
         }
-
     }
 
     private void validateLoanRequest(LoanCreationRequestDto loanRequest) {
@@ -155,11 +174,22 @@ public class LoanServiceImpl implements LoanService {
     private boolean isLoanFullyRepaid(Loan loan) {
 
         BigDecimal totalPaid = loan.getLoanPayments().stream()
+                .filter(p -> LoanPaymentStatus.COMPLETED.getValue().equals(p.getStatus()))
                 .map(LoanPayment::getPaymentAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal totalToRepay = loan.getAmount()
-                .multiply(BigDecimal.ONE.add(loan.getInterestRate().divide(BigDecimal.valueOf(100))));
+        long daysBetween = ChronoUnit.DAYS.between(
+                loan.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                LocalDate.now()
+        );
+        BigDecimal years = BigDecimal.valueOf(daysBetween).divide(BigDecimal.valueOf(365), 10, RoundingMode.HALF_UP);
+
+        BigDecimal interest = loan.getAmount()
+                .multiply(loan.getInterestRate())
+                .multiply(years)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        BigDecimal totalToRepay = loan.getAmount().add(interest);
 
         return totalPaid.compareTo(totalToRepay) >= 0;
     }

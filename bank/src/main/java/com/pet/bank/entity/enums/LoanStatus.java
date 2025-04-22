@@ -6,7 +6,6 @@ import lombok.Getter;
 public enum LoanStatus {
 
     ACTIVE("ACTIVE"),
-    INACTIVE("INACTIVE"),
     REPAID("REPAID");
 
     private final String value;

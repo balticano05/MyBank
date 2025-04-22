@@ -25,16 +25,9 @@ public class UserController {
         return userService.findAllUsersByParameters(userSearchParametersRequest);
     }
 
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'CONSULTANT')")
-//    public UserCreationResponseDto createUser(@Valid @RequestBody UserCreationRequestDto userCreationRequest) {
-//        return userService.createUser(userCreationRequest);
-//    }
-
     @PutMapping("/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CONSULTANT')")
-    public UserUpdateResponseDto createUpdate(
+    public UserUpdateResponseDto update(
             @PathVariable UUID userId,
             @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         return userService.updateUserById(userId, userUpdateRequestDto);
