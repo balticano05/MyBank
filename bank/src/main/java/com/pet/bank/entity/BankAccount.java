@@ -47,11 +47,11 @@ public class BankAccount {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "currency_id")
     private Currency currency;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "bankAccount")
     private List<Card> cards;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount")

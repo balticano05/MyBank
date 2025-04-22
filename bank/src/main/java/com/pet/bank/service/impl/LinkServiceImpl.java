@@ -24,101 +24,109 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public AllUsersShortResponseDto addLinksToAllUsersShortResponseDto(AllUsersShortResponseDto allUsersShortResponseDto) {
-
         List<UserShortDto> usersWithLinks = allUsersShortResponseDto.getUsers().stream()
                 .map(this::addLinksToUserShortDto)
                 .collect(Collectors.toList());
-
         allUsersShortResponseDto.setUsers(usersWithLinks);
-
         return addCollectionLinks(allUsersShortResponseDto);
     }
 
     @Override
     public AllUserBankAccountsResponseDto addLinksToAllUserBankAccountsResponseDto(
             AllUserBankAccountsResponseDto allUserBankAccountsResponseDto, UUID userId) {
-
         List<BankAccountDto> accountsWithLinks = allUserBankAccountsResponseDto.getBankAccounts().stream()
                 .map(account -> addLinksToBankAccountDto(account, userId))
                 .collect(Collectors.toList());
-
         allUserBankAccountsResponseDto.setBankAccounts(accountsWithLinks);
-
         return addCollectionLinks(allUserBankAccountsResponseDto, userId);
     }
 
     private UserShortDto addLinksToUserShortDto(UserShortDto userShortDto) {
         return userShortDto.add(
+                // DELETE /api/v1/users/{id}
                 linkTo(UserController.class)
                         .slash(userShortDto.getId())
                         .withRel("delete")
                         .withType("DELETE"),
 
-                linkTo(methodOn(UserController.class)
-                        .createUpdate(userShortDto.getId(), UserUpdateRequestDto.builder().build()))
+                // PUT /api/v1/users/{id}
+                linkTo(UserController.class)
+                        .slash(userShortDto.getId())
                         .withRel("update")
                         .withType("PUT"),
 
-                linkTo(methodOn(BankAccountController.class)
-                        .findAllBankAccounts(userShortDto.getId()))
+                // GET /api/v1/users/{id}/accounts
+                linkTo(UserController.class)
+                        .slash(userShortDto.getId())
+                        .slash("accounts")
                         .withRel("accounts")
                         .withType("GET")
-
         );
-
     }
 
     private AllUsersShortResponseDto addCollectionLinks(AllUsersShortResponseDto response) {
-        response.add(
-                linkTo(methodOn(UserController.class).createUser(null))
+        return response.add(
+                // POST /api/v1/users
+                linkTo(UserController.class)
                         .withRel("create-user")
                         .withType("POST"),
 
-                linkTo(methodOn(UserController.class).findAllUsersByParameters(null))
+                // GET /api/v1/users
+                linkTo(UserController.class)
                         .withSelfRel()
         );
-
-        return response;
     }
 
     private AllUserBankAccountsResponseDto addCollectionLinks(
             AllUserBankAccountsResponseDto responseDto, UUID userId) {
         return responseDto.add(
-
-                linkTo(methodOn(BankAccountController.class)
-                        .createBankAccountForUser(userId, null))
+                // POST /api/v1/users/{userId}/accounts
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
                         .withRel("create-account")
                         .withType("POST"),
 
-                linkTo(methodOn(BankAccountController.class)
-                        .findAllBankAccounts(userId))
+                // GET /api/v1/users/{userId}/accounts
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
                         .withSelfRel()
         );
     }
 
     private BankAccountDto addLinksToBankAccountDto(BankAccountDto bankAccountDto, UUID userId) {
         return bankAccountDto.add(
-
-                linkTo(methodOn(BankAccountController.class)
-                        .findBankAccountById(bankAccountDto.getId()))
+                // GET /api/v1/users/{userId}/accounts/{accountId}
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
+                        .slash(bankAccountDto.getId())
                         .withSelfRel()
                         .withType("GET"),
 
-                linkTo(methodOn(BankAccountController.class)
-                        .updateBankAccountById(bankAccountDto.getId(), null))
+                // PUT /api/v1/users/{userId}/accounts/{accountId}
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
+                        .slash(bankAccountDto.getId())
                         .withRel("update-account")
                         .withType("PUT"),
 
-                linkTo(methodOn(BankAccountController.class)
-                        .deleteBankAccountById(bankAccountDto.getId()))
+                // DELETE /api/v1/users/{userId}/accounts/{accountId}
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
+                        .slash(bankAccountDto.getId())
                         .withRel("delete-account")
                         .withType("DELETE"),
 
-                linkTo(methodOn(BankAccountController.class)
-                        .findAllBankAccounts(userId))
+                // GET /api/v1/users/{userId}/accounts
+                linkTo(UserController.class)
+                        .slash(userId)
+                        .slash("accounts")
                         .withRel("back-to-accounts")
                         .withType("GET")
         );
     }
-
 }
